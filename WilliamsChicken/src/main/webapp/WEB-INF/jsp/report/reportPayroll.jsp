@@ -94,9 +94,6 @@
                                                         <tr>
                                                             <td>${item.date}</td>
                                                             <td>${item.store.storeName}</td>
-                                                            <%--  <td>${item.totalRegPay}</td>
-                                                            <td>${item.totalOTPay}</td>
-<td>${item.dailyTotalPay}</td>--%>
                                                             <td style="width: 70%">
                                                                 <table class="table table-condensed table-bordered">
                                                                     <thead>
@@ -117,9 +114,9 @@
                                                                                 <td>${item1.regHour}</td>
                                                                                 <td>${item1.ot}</td>
                                                                                 <td>${item1.payRate}</td>
-                                                                                <td>${item.totalRegPay}</td>
-                                                                                <td>${item.totalOTPay}</td>
-                                                                                <td>${item.dailyTotalPay}</td>
+                                                                                <td><fmt:formatNumber value="${item1.totalRegPay}" maxFractionDigits="2" /></td>
+                                                                                <td><fmt:formatNumber value="${item1.totalOTPay}" maxFractionDigits="2" /></td>
+                                                                                <td><fmt:formatNumber value="${item1.dailyTotalPay}" maxFractionDigits="2" /></td>
                                                                             </tr>
                                                                         </c:forEach>
                                                                     </tbody>

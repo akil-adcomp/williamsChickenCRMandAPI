@@ -66,8 +66,11 @@
                                         <div class="form-group">
                                             <label class="req col-md-2 col-xs-12 control-label">Store State</label>
                                             <div class="col-md-6 col-xs-12">
-                                                <form:input path="stateName" cssClass="form-control"/>
-                                                <span class="help-block">Please enter store city</span>
+                                                <form:select path="stateId" id="stateId" cssClass="form-control select">
+                                                    <form:option value="0" label="Nothing selected"/>
+                                                    <form:options items="${stateList}" itemLabel="stateName" itemValue="stateId"/>
+                                                </form:select>
+                                                <span class="help-block">Please select state</span>
                                             </div>
                                         </div>
                                     </div> 

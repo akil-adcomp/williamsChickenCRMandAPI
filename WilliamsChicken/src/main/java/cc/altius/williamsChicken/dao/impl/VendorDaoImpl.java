@@ -50,7 +50,7 @@ public class VendorDaoImpl implements VendorDao {
         try {
             params.put("VENDOR_NAME", vendor.getVendorName());
             params.put("VENDOR_CITY", vendor.getCity());
-            params.put("VENDOR_STATE_ID", vendor.getStateId());
+            params.put("STATE_ID", vendor.getStateId());
             params.put("VENDOR_ADDRESS", vendor.getVendorAddress());
             params.put("CREATED_DATE", curDate);
             params.put("ACTIVE", 1);
@@ -71,7 +71,7 @@ public class VendorDaoImpl implements VendorDao {
     public Vendor getVendorByVendorId(int vendorId) {
         String sql = "SELECT v.*,u.`USERNAME`, s.`STATE_NAME`FROM vendor v "
                 + " LEFT JOIN `user` u ON v.`LAST_MODIFIED_BY`=u.`USER_ID`"
-                + " LEFT JOIN state s ON v.`VENDOR_STATE_ID`=s.`STATE_ID`"
+                + " LEFT JOIN state s ON v.`STATE_ID`=s.`STATE_ID`"
                 + " WHERE v.`VENDOR_ID`=?";
         return this.jdbcTemplate.queryForObject(sql, new VendorRowMapper(), vendorId);
     }
@@ -87,7 +87,7 @@ public class VendorDaoImpl implements VendorDao {
                     + " SET "
                     + " v.`VENDOR_NAME`=:vendorName,"
                     + " v.`VENDOR_CITY`=:vendorCity,"
-                    + " v.`VENDOR_STATE_ID`=:vendorStateId,"
+                    + " v.`STATE_ID`=:vendorStateId,"
                     + " v.`LAST_MODIFIED_DATE`=:lastModifiedDate,"
                     + " v.`LAST_MODIFIED_BY`=:lastModifiedBy"
                     + " WHERE v.`VENDOR_ID`=:vendorId";
@@ -109,7 +109,7 @@ public class VendorDaoImpl implements VendorDao {
     public List<Vendor> getVendorList() {
         String sql = "SELECT v.*,u.`USERNAME`,s.`STATE_NAME` FROM vendor v "
                 + " LEFT JOIN `user` u ON v.`LAST_MODIFIED_BY`=u.`USER_ID`"
-                + " LEFT JOIN state s ON v.`VENDOR_STATE_ID`=s.`STATE_ID`"
+                + " LEFT JOIN state s ON v.`STATE_ID`=s.`STATE_ID`"
                 + " ORDER BY v.`VENDOR_ID`";
         return this.jdbcTemplate.query(sql, new VendorRowMapper());
     }

@@ -63,8 +63,13 @@ public class PayrollResultSetExtractor implements ResultSetExtractor<List<Payrol
             e.setFirstName(rs.getString("name"));
             payrollDetails.setEmployee(e);
             payroll.getPayrollDetails().add(payrollDetails);
-            payroll.addOTTotal(payrollDetails.getOt(), payrollDetails.getPayRate());
-            payroll.addRegPayTotal(payrollDetails.getOt(), payrollDetails.getRegHour(), payrollDetails.getPayRate());
+            double regularPay = (payrollDetails.getRegHour() * payrollDetails.getPayRate());
+            double overTimePerHr = (payrollDetails.getPayRate() * 1.5);
+            double overTimePay = (payrollDetails.getOt() * overTimePerHr);
+            double totalPayAmount = (regularPay + overTimePay);
+            payrollDetails.setDailyTotalPay(totalPayAmount);
+            payrollDetails.setTotalOTPay(overTimePay);
+            payrollDetails.setTotalRegPay(regularPay);
             oldStoreId = newStoreId;
             oldCreatedDate = newCreated;
         }

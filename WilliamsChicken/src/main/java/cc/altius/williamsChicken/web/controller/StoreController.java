@@ -72,8 +72,9 @@ public class StoreController {
     @RequestMapping(value = "/store/showEditStore.htm", method = RequestMethod.POST)
     public String showEditStoreForm(@RequestParam(value = "storeId", required = true) int storeId, ModelMap model) {
         CustomUserDetails curUser = (CustomUserDetails) (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        System.out.println("storeId == " + storeId);
         Store store = this.storeService.getStoreByStoreId(storeId);
+        List<State> stateList = this.stateService.getStateList();
+        model.addAttribute("stateList", stateList);
         model.addAttribute("store", store);
         return "/store/editStore";
     }

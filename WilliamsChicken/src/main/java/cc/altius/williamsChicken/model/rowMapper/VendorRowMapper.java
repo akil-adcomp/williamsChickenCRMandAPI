@@ -22,7 +22,7 @@ public class VendorRowMapper implements RowMapper<Vendor> {
         data.setVendorId(rs.getInt("VENDOR_ID"));
         data.setVendorName(rs.getString("VENDOR_NAME"));
         data.setCity(rs.getString("VENDOR_CITY"));
-        data.setStateId(rs.getInt("VENDOR_STATE_ID"));
+        data.setStateId(rs.getInt("STATE_ID"));
         data.setStateName(rs.getString("STATE_NAME"));
         data.setVendorAddress(rs.getString("VENDOR_ADDRESS"));
         data.setCreatedDate(rs.getDate("CREATED_DATE"));

@@ -44,7 +44,7 @@ public class StoreDaoImpl implements StoreDao {
     public List<Store> getStoreList() {
         String sql = "SELECT s.*,u.`USER_ID`,u.`USERNAME`, st.`STATE_NAME` FROM store s"
                 + " LEFT JOIN `user` u ON s.`CREATED_BY`=u.`USER_ID`"
-                + " LEFT JOIN state st ON s.`STORE_STATE_ID`=st.`STATE_ID`";
+                + " LEFT JOIN state st ON s.`STATE_ID`=st.`STATE_ID`";
         return this.jdbcTemplate.query(sql, new StoreRowMapper());
     }
 
@@ -56,7 +56,7 @@ public class StoreDaoImpl implements StoreDao {
         Map<String, Object> params = new HashMap<>();
 
         params.put("STORE_CITY", store.getCity());
-        params.put("STORE_STATE_ID", store.getStateId());
+        params.put("STATE_ID", store.getStateId());
         params.put("STORE_NAME", store.getStoreName());
         params.put("CREATED_DATE", curDate);
         params.put("CREATED_BY", curUser);
@@ -71,7 +71,7 @@ public class StoreDaoImpl implements StoreDao {
     public Store getStoreByStoreId(int storeId) {
         String sql = "SELECT s.*,u.`USER_ID`,u.`USERNAME`, st.`STATE_NAME` FROM store s "
                 + " LEFT JOIN `user` u ON s.`CREATED_BY`=u.`USER_ID`"
-                + " LEFT JOIN state st ON s.`STORE_STATE_ID`= st.`STATE_ID`"
+                + " LEFT JOIN state st ON s.`STATE_ID`= st.`STATE_ID`"
                 + " WHERE s.`STORE_ID`=?";
         return this.jdbcTemplate.queryForObject(sql, new StoreRowMapper(), storeId);
     }
@@ -87,13 +87,13 @@ public class StoreDaoImpl implements StoreDao {
                     + " SET "
                     + " s.`STORE_NAME`=:storeName,"
                     + " s.`STORE_CITY`=:storeCity,"
-                    + " s.`STORE_STATE_ID`=:storeStateId,"
+                    + " s.`STATE_ID`=:stateId,"
                     + " s.`LAST_MODIFIED_DATE`=:lastModifiedDate,"
                     + " s.`LAST_MODIFIED_BY`=:lastModifiedBy"
                     + " WHERE s.`STORE_ID`=:storeId";
             params.put("storeName", store.getStoreName());
             params.put("storeCity", store.getCity());
-            params.put("storeStateId", store.getStateId());
+            params.put("stateId", store.getStateId());
             params.put("lastModifiedDate", curDate);
             params.put("lastModifiedBy", curUser);
             params.put("storeId", store.getStoreId());

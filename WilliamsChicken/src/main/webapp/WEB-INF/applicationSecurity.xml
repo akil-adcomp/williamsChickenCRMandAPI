@@ -15,7 +15,7 @@
     <context:component-scan base-package="cc.altius.williamsChicken.security" />
     <context:annotation-config />
     <http auto-config="true" use-expressions="true">
-        <access-denied-handler error-page="/errors/accessDenied"/>
+        <access-denied-handler error-page="/errors/accessDenied.htm"/>
         <form-login 
             login-page="/home/login.htm"
             authentication-failure-url="/home/login.htm?login_error=true"

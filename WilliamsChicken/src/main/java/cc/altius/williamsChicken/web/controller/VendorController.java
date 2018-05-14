@@ -74,6 +74,8 @@ public class VendorController {
     public String showEditVendorForm(@RequestParam(value = "vendorId", required = true) int vendorId, ModelMap model) {
         CustomUserDetails curUser = (CustomUserDetails) (SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         Vendor vendor = this.vendorService.getVendorByVendorId(vendorId);
+        List<State> stateList = this.stateService.getStateList();
+        model.addAttribute("stateList", stateList);
         model.addAttribute("vendor", vendor);
         return "/vendor/editVendor";
     }

@@ -24,7 +24,7 @@ public class StoreRowMapper implements RowMapper<Store> {
         data.setCreatedDate(rs.getDate("CREATED_DATE"));
         data.setLastModifiedBy(rs.getInt("LAST_MODIFIED_BY"));
         data.setLastModifiedDate(rs.getDate("LAST_MODIFIED_DATE"));
-        data.setStateId(rs.getInt("STORE_STATE_ID"));
+        data.setStateId(rs.getInt("STATE_ID"));
         data.setStateName(rs.getString("STATE_NAME"));
         data.setStoreId(rs.getInt("STORE_ID"));
         data.setStoreName(rs.getString("STORE_NAME"));

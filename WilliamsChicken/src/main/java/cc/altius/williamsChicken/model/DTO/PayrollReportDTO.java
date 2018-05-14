@@ -83,21 +83,4 @@ public class PayrollReportDTO {
     public void setPayrollDetails(List<PayrollEmployeeDetails> payrollDetails) {
         this.payrollDetails = payrollDetails;
     }
-
-    public void addOTTotal(int overTime, double paymentRate) {
-
-        double overTimePerHr = paymentRate * 1.5;
-        double overTimePay = (int) Math.round(overTime * overTimePerHr * 100) / (double) 100;
-        this.totalOTPay += overTimePay;
-    }
-
-    public void addRegPayTotal(int overTime, int regHour, double paymentRate) {
-        //  (int)Math.round(regularPay + overTimePay * 100)/(double)100;
-        double regularPay = (int) Math.round(regHour * paymentRate * 100) / (double) 100;
-        double overTimePerHr = paymentRate * 1.5;
-        double overTimePay = overTime * overTimePerHr;
-        double totalPayAmount = (int) Math.round(regularPay + overTimePay * 100) / (double) 100;
-        this.totalRegPay += regularPay;
-        this.dailyTotalPay += totalPayAmount;
-    }
 }
