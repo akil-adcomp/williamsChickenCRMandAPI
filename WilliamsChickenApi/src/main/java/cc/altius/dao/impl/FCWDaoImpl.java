@@ -45,7 +45,7 @@ public class FCWDaoImpl implements FCWDao {
     public int addFCW(List<FCW> fcws, int userId) {
         int fcwId = 1;
         String curDate = DateUtils.getCurrentDateString(DateUtils.IST, DateUtils.YMDHMS);
-        String sql1 = "INSERT INTO fcw VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql1 = "INSERT INTO fcw VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?,?)";
         List<Object[]> batchParams = new ArrayList<>();
         for (FCW fcw : fcws) {
             Date cdate = null;
@@ -55,7 +55,7 @@ public class FCWDaoImpl implements FCWDao {
             } catch (ParseException ex) {
                 Logger.getLogger(FCWDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
-            Object[] tmp = {fcw.getStore().getStoreId(), fcw.getVendor().getVendorId(), fcw.getInvoice(), fcw.getAmount(), cdate, fcw.getPaidOutAmount(), fcw.getOfChickenPur(), curDate, userId, curDate, userId};
+            Object[] tmp = {fcw.getStore().getStoreId(), fcw.getVendor().getVendorId(), fcw.getInvoice(), fcw.getAmount(), cdate, fcw.getPaidOutAmount(), fcw.getOfChickenPur(), curDate, userId, curDate, userId, fcw.getDummyVendor()};
             batchParams.add(tmp);
         }
 

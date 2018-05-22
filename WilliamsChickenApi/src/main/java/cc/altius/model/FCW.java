@@ -29,6 +29,17 @@ public class FCW implements Serializable {
     private int createdBy;
     private Date lastModifiedDate;
     private int lastModifiedBy;
+    private String dummyVendor;
+
+    public String getDummyVendor() {
+        return dummyVendor;
+    }
+
+    public void setDummyVendor(String dummyVendor) {
+        this.dummyVendor = dummyVendor;
+    }
+    
+    
 
     public int getFcwId() {
         return fcwId;
@@ -160,6 +171,7 @@ public class FCW implements Serializable {
 
     @Override
     public String toString() {
-        return "FCW{" + "fcwId=" + fcwId + ", store=" + store + ", vendor=" + vendor + ", invoice=" + invoice + ", amount=" + amount + ", submitDate=" + submitDate + ", paidOutAmount=" + paidOutAmount + ", totalPaidOutAmount=" + totalPaidOutAmount + ", totalAmount=" + totalAmount + ", ofChickenPur=" + ofChickenPur + ", totalOfChickenPur=" + totalOfChickenPur + ", userId=" + userId + ", createdDate=" + createdDate + ", createdBy=" + createdBy + ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy + '}';
+        return "FCW{" + "fcwId=" + fcwId + ", store=" + store + ", vendor=" + vendor + ", invoice=" + invoice + ", amount=" + amount + ", submitDate=" + submitDate + ", paidOutAmount=" + paidOutAmount + ", totalPaidOutAmount=" + totalPaidOutAmount + ", totalAmount=" + totalAmount + ", ofChickenPur=" + ofChickenPur + ", totalOfChickenPur=" + totalOfChickenPur + ", userId=" + userId + ", createdDate=" + createdDate + ", createdBy=" + createdBy + ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy + ", dummyVendor=" + dummyVendor + '}';
     }
+
 }
