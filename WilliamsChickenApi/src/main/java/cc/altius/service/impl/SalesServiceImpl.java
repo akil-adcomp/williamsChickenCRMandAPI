@@ -5,6 +5,7 @@
 package cc.altius.service.impl;
 
 import cc.altius.dao.SalesDao;
+import cc.altius.model.DTO.SalesReportDTO;
 import cc.altius.model.Sales;
 import cc.altius.service.SalesService;
 import java.util.List;
@@ -22,12 +23,17 @@ public class SalesServiceImpl implements SalesService {
     private SalesDao salesDao;
 
     @Override
-    public int addSales(Sales sales) {
-        return this.salesDao.addSales(sales);
+    public int addSales(Sales sales, int userId) {
+        return this.salesDao.addSales(sales, userId);
     }
 
     @Override
-    public List<Sales> getSalesListReportByDate(String startDate, String endDate) {
-        return this.salesDao.getSalesListReportByDate(startDate, endDate);
+    public SalesReportDTO getSalesListReportByDate(String startDate) {
+        return this.salesDao.getSalesListReportByDate(startDate);
+    }
+
+    @Override
+    public boolean isExitRecord(String submitDate) {
+        return this.salesDao.isExitRecord(submitDate);
     }
 }

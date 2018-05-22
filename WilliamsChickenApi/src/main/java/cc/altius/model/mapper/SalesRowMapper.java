@@ -20,30 +20,33 @@ public class SalesRowMapper implements RowMapper<Sales> {
     @Override
     public Sales mapRow(ResultSet rs, int i) throws SQLException {
         Sales data = new Sales();
+        data.setAcounntReceivable(rs.getDouble("ACCOUNT_RECEIVABLE"));
+        data.setAmountPerBird(rs.getDouble("AMOUNT_PER_BIRD"));
+        data.setBegningHeadCount(rs.getInt("BEGNING_HEAD_COUNT"));
+        data.setBirdsOnHand(rs.getInt("BIRDS_ON_HAND"));
+        data.setBirdsWasted(rs.getInt("BIRDS_WASTED"));
+        data.setChickenUsage(rs.getInt("CHICKEN_USAGE"));
         data.setCreatedBy(rs.getInt("CREATED_BY"));
         data.setCreatedDate(rs.getDate("CREATED_DATE"));
+        data.setEndingEnventory(rs.getInt("ENDING_INVENTORY"));
         data.setGrossSales(rs.getDouble("GROSS_SALES"));
-        data.setLastModifiedBy(rs.getInt("LAST_MODIFIED_BY"));
+        data.setLastModifiedBy(rs.getInt("LAST_MODIFIED_DATE"));
         data.setLastModifiedDate(rs.getDate("LAST_MODIFIED_DATE"));
         data.setNetSales(rs.getDouble("NET_SALES"));
-        data.setNetselsLastWeek(rs.getInt("NET_SALES_LAST_WEEK"));
-        data.setNonTaxSales(rs.getInt("NON_TAX_SALES"));
-        data.setSalesId(rs.getInt("SALES_ID"));
+        data.setNonTaxSales(rs.getDouble("NON_TAX_SALES"));
+        data.setOfficerDiscount(rs.getDouble("OFFICER_DISCOUNT"));
+        data.setPurchase(rs.getInt("PURCHASE"));
+        data.setSalesId(rs.getInt("SALE_ID"));
         data.setSalesTax(rs.getDouble("SALES_TAX"));
-        data.setNetSalesLastYear(rs.getDouble("NET_SALES_LAST_YEAR"));
-
-        Store store = new Store();
-        store.setStoreId(rs.getInt("STORE_ID"));
-        store.setStoreName(rs.getString("STORE_NAME"));
-        data.setStore(store);
-
-        data.setSubmitDate(rs.getDate("SUBMIT_DATE"));
-        data.setTotalSales(rs.getInt("TOTAL_SALES"));
-
-        User user = new User();
-        user.setUserId(rs.getInt("CREATED_BY"));
-        user.setUsername(rs.getString("USERNAME"));
-        data.setUser(user);
+        data.setStoreTransfer(rs.getInt("STORE_TRANSFER"));
+        data.setSubmitDate(rs.getString("SUBMIT_DATE"));
+        data.setTotalPaidOut(rs.getDouble("TOTAL_PAID_OUT"));
+        data.setTotalSales(rs.getDouble("TOTAL_SALES"));
+        data.setVariance(rs.getInt("VARIANCE"));
+        Store s = new Store();
+        s.setStoreId(rs.getInt("STORE_ID"));
+        s.setStoreName(rs.getString("STORE_NAME"));
+        data.setStore(s);
         return data;
     }
 }

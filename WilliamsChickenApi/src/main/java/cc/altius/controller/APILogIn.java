@@ -103,6 +103,7 @@ public class APILogIn {
         @ApiResponse(code = 404, response = ResponseFormat.class, message = "OTP SENDING_FAILED"),
         @ApiResponse(code = 500, response = ResponseFormat.class, message = "Exception Occured")})
     public ResponseEntity forgotPassword(
+            @ApiParam(name = "emailId", value = "Email Id for forgot password", required = true)
             @RequestHeader(value = "emailId") String emailId) {
         LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("emailId " + emailId));
         Boolean updatedStatus;
@@ -226,46 +227,6 @@ public class APILogIn {
             responseFormat.setFailedValue(ErrorConstants.INVALID_VERSION_TOKEN);
             return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
 
-        }
-    }
-
-    @PostMapping(value = "/signout", produces = "application/json;charset=UTF-8")
-    @ApiOperation(value = "signout",
-    notes = "signout ",
-    response = Boolean.class)
-    @ApiResponses(value = {
-        @ApiResponse(code = 200, response = Boolean.class, message = "OK"),
-        @ApiResponse(code = 404, response = ResponseFormat.class, message = "USER_DOES_NOT_EXIST / TOKEN_RETRIVAL"),
-        @ApiResponse(code = 500, response = ResponseFormat.class, message = "Exception Occured")})
-    public ResponseEntity signout(
-            @ApiParam(name = "userId", value = "Users Id", required = true)
-            @RequestHeader(value = "userId") int userId) {
-        LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("UserId " + userId));
-        LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("UserId " + userId));
-        Token token;
-        ResponseFormat responseFormat = new ResponseFormat();
-        Map<String, Object> responseMap = null;
-        try {
-            responseMap = this.apiService.signout(userId);
-            if (responseMap.get("updatedStatus") != null) {
-                LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("signout successfully"));
-                return new ResponseEntity(responseMap.get("updatedStatus"), HttpStatus.OK);
-            } else {
-                responseFormat.setStatus("failed");
-                responseFormat.setFailedReason(responseMap.get("failedReason") + "");
-                responseFormat.setFailedValue((Integer) responseMap.get("failedValue"));
-                responseFormat.setParameter("UserId :" + userId);
-                return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
-            LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
-            responseFormat.setStatus("failed");
-            responseFormat.setFailedReason("Exception Occured :" + e.getClass());
-            responseFormat.setFailedValue(ErrorConstants.EXCEPTION_OCCURED);
-            responseFormat.setParameter("userId :" + userId);
-            return new ResponseEntity(responseFormat, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

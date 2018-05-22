@@ -35,9 +35,5 @@ public class ErrorConstants extends HashMap<Object, Object> {
     public final static int OTP_VERIFICATION_FAILED = 19;
     public final static int INVALID_VERSION_TOKEN = 20;
     public final static int VERSION_TOKEN_EXPIRED = 21;
-    public final static int MOBILE_NO_ALREADY_EXIST = 22;
-    public final static int MAX_ACCOUNT_LIMIT_REACHED = 23;
-    public final static int BENEFICIARY_TRANSACTION_FAILED=24;
-    public final static int EMAIL_ALREADY_EXIST_WITH_ANOTHER_ACCNT=25;
-
+    public final static int ALREADY_EXIT_RECORD = 22;
 }

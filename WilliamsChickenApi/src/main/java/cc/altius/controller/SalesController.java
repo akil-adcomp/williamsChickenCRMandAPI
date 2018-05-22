@@ -4,9 +4,11 @@
  */
 package cc.altius.controller;
 
+import cc.altius.model.DTO.SalesReportDTO;
 import cc.altius.model.Payroll;
 import cc.altius.model.ResponseFormat;
 import cc.altius.model.Sales;
+import cc.altius.model.Store;
 import cc.altius.model.ValidToken;
 import cc.altius.service.ApiService;
 import cc.altius.service.SalesService;
@@ -17,8 +19,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +41,8 @@ public class SalesController {
     private SalesService salesService;
     @Autowired
     private ApiService apiService;
+    private @Value("#{settings['williamsChickenApiToken']}")
+    String williamsChickenApiToken;
 
     @PostMapping(value = "/addSales", produces = "application/json;charset=UTF-8")
     @ApiOperation(value = "Add a sales method",
@@ -46,51 +52,64 @@ public class SalesController {
         @ApiResponse(code = 200, response = Boolean.class, message = "OK"),
         @ApiResponse(code = 401, response = ResponseFormat.class, message = "INVALID TOKEN"),
         @ApiResponse(code = 500, response = ResponseFormat.class, message = "Exception Occured"),})
-    public ResponseEntity addPaymentMethod(
+    public ResponseEntity addSales(
             @ApiParam(name = "token", value = "Token for authentication", required = true)
             @RequestHeader(value = "token") String token,
+            @ApiParam(name = "apptoken", value = "APP Token for authentication", required = true)
+            @RequestHeader(value = "apptoken") String appToken,
             @ApiParam(name = "userId", value = "Users Id", required = true)
             @RequestHeader(value = "userId") int userId,
             @ApiParam(name = "content", value = "content", required = true)
             @RequestBody String content) {
         ResponseFormat responseFormat = new ResponseFormat();
-        try {
-            LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog(" token :" + token));
-            LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog(" token :" + token));
-            ValidToken validToken = this.apiService.validateToken(token, userId);
-            if (validToken.isIsValid()) {
-                LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Valid Request"));
-                LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Valid Request"));
+        if (appToken.equals(williamsChickenApiToken)) {
+            try {
+                LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog(" token :" + token));
+                LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog(" token :" + token));
+                ValidToken validToken = this.apiService.validateToken(token, userId);
 
-                Gson gson = new Gson();
-                Sales sales = gson.fromJson(content, Sales.class);
+                if (validToken.isIsValid()) {
+                    LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Valid Request"));
+                    LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Valid Request"));
 
-                LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("sales " + sales.toString()));
-                LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("payroll " + sales.toString()));
+                    Gson gson = new Gson();
+                    Sales sales = gson.fromJson(content, Sales.class);
 
-                int insertedCount = this.salesService.addSales(sales);
-                if (insertedCount > 0) {
-                    LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("insertedCount :" + insertedCount));
-                    LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("insertedCount :" + insertedCount));
-                    return new ResponseEntity("success", HttpStatus.OK);
+                    LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("sales " + sales.toString()));
+                    LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("sales " + sales.toString()));
+
+                    int insertedCount = this.salesService.addSales(sales, userId);
+
+                    if (insertedCount > 0) {
+                        LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("insertedCount :" + insertedCount));
+                        LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("insertedCount :" + insertedCount));
+                        responseFormat.setStatus("success");
+                        return new ResponseEntity(responseFormat, HttpStatus.OK);
+                    } else {
+                        LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("insertedCount :" + insertedCount));
+                        LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("insertedCount :" + insertedCount));
+                        return new ResponseEntity("failed", HttpStatus.INTERNAL_SERVER_ERROR);
+                    }
                 } else {
-                    LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("insertedCount :" + insertedCount));
-                    LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("insertedCount :" + insertedCount));
-                    return new ResponseEntity("failed", HttpStatus.OK);
+                    responseFormat.setStatus("failed");
+                    responseFormat.setFailedReason("INVALID_TOKEN");
+                    responseFormat.setFailedValue(ErrorConstants.INVALID_TOKEN);
+                    return new ResponseEntity(responseFormat, HttpStatus.UNAUTHORIZED);
                 }
-            } else {
+            } catch (Exception e) {
+                e.printStackTrace();
+                LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
+                LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
                 responseFormat.setStatus("failed");
-                responseFormat.setFailedReason("INVALID_TOKEN");
-                responseFormat.setFailedValue(ErrorConstants.INVALID_TOKEN);
-                return new ResponseEntity(responseFormat, HttpStatus.UNAUTHORIZED);
+                responseFormat.setFailedReason("Exception Occured :" + e.getClass().getSimpleName());
+                return new ResponseEntity(responseFormat, HttpStatus.INTERNAL_SERVER_ERROR);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
-            LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
-            responseFormat.setStatus("failed");
-            responseFormat.setFailedReason("Exception Occured :" + e.getClass().getSimpleName());
-            return new ResponseEntity(responseFormat, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            responseFormat.setStatus("Failed");
+            responseFormat.setFailedReason("Invalid token");
+            responseFormat.setFailedValue(ErrorConstants.INVALID_VERSION_TOKEN);
+            return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
+
         }
     }
 
@@ -102,48 +121,56 @@ public class SalesController {
         @ApiResponse(code = 200, response = Boolean.class, message = "OK"),
         @ApiResponse(code = 401, response = ResponseFormat.class, message = "INVALID TOKEN"),
         @ApiResponse(code = 500, response = ResponseFormat.class, message = "Exception Occured"),})
-    public ResponseEntity getPayrollReport(
+    public ResponseEntity getSalesReport(
             @ApiParam(name = "token", value = "Token for authentication", required = true)
             @RequestHeader(value = "token") String token,
+            @ApiParam(name = "apptoken", value = "APP Token for authentication", required = true)
+            @RequestHeader(value = "apptoken") String appToken,
             @ApiParam(name = "startDate", value = "Start Date for report", required = true)
             @RequestHeader(value = "startDate") String startDate,
             @ApiParam(name = "userId", value = "Users Id", required = true)
-            @RequestHeader(value = "userId") int userId,
-            @ApiParam(name = "endDate", value = "End Date for report", required = true)
-            @RequestHeader(value = "endDate") String endDate) {
+            @RequestHeader(value = "userId") int userId) {
         ResponseFormat responseFormat = new ResponseFormat();
-        try {
-            LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog(" token :" + token));
-            LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog(" token :" + token));
-            ValidToken validToken = this.apiService.validateToken(token, userId);
-            if (validToken.isIsValid()) {
-                LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Valid Request"));
-                LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Valid Request"));
+        if (appToken.equals(williamsChickenApiToken)) {
+            try {
+                LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog(" token :" + token));
+                LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog(" token :" + token));
+                ValidToken validToken = this.apiService.validateToken(token, userId);
+                boolean isExitRecord = this.salesService.isExitRecord(startDate);
+                if (validToken.isIsValid()) {
+                    LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Valid Request"));
+                    LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Valid Request"));
+                    if (isExitRecord) {
+                        responseFormat.setStatus("failed");
+                        responseFormat.setFailedReason("Already Exist");
+                        responseFormat.setFailedValue(ErrorConstants.ALREADY_EXIT_RECORD);
+                        return new ResponseEntity(responseFormat, HttpStatus.UNAUTHORIZED);
+                    } else {
+                        SalesReportDTO salesReportDTO = this.salesService.getSalesListReportByDate(startDate);
+                        return new ResponseEntity(salesReportDTO, HttpStatus.OK);
 
-                List<Sales> salesList = this.salesService.getSalesListReportByDate(startDate, endDate);
-                if (salesList.isEmpty()) {
-                    responseFormat.setStatus("failed");
-                    responseFormat.setFailedReason("EmptyResultSetException");
-                    responseFormat.setFailedValue(ErrorConstants.EMPTY_LIST);
-                    return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
+                    }
+
                 } else {
-                    LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("sales list :" + salesList));
-                    LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("sales list :" + salesList));
-                    return new ResponseEntity(salesList, HttpStatus.OK);
+                    responseFormat.setStatus("failed");
+                    responseFormat.setFailedReason("INVALID_TOKEN");
+                    responseFormat.setFailedValue(ErrorConstants.INVALID_TOKEN);
+                    return new ResponseEntity(responseFormat, HttpStatus.UNAUTHORIZED);
                 }
-            } else {
+            } catch (Exception e) {
+                e.printStackTrace();
+                LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
+                LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
                 responseFormat.setStatus("failed");
-                responseFormat.setFailedReason("INVALID_TOKEN");
-                responseFormat.setFailedValue(ErrorConstants.INVALID_TOKEN);
-                return new ResponseEntity(responseFormat, HttpStatus.UNAUTHORIZED);
+                responseFormat.setFailedReason("Exception Occured :" + e.getClass().getSimpleName());
+                return new ResponseEntity(responseFormat, HttpStatus.INTERNAL_SERVER_ERROR);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
-            LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
-            responseFormat.setStatus("failed");
-            responseFormat.setFailedReason("Exception Occured :" + e.getClass().getSimpleName());
-            return new ResponseEntity(responseFormat, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            responseFormat.setStatus("Failed");
+            responseFormat.setFailedReason("Invalid token");
+            responseFormat.setFailedValue(ErrorConstants.INVALID_VERSION_TOKEN);
+            return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
+
         }
     }
 }

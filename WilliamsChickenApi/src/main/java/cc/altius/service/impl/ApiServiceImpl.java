@@ -31,23 +31,8 @@ public class ApiServiceImpl implements ApiService {
     private ApiDao apiDao;
 
     @Override
-    public Map<String, Object> checkExistingCustomer(String mobileNo) {
-        return this.apiDao.checkExistingCustomer(mobileNo);
-    }
-
-    @Override
     public Map<String, Object> signIn(String userName, String password) {
         return this.apiDao.signIn(userName, password);
-    }
-
-    @Override
-    public Map<String, Object> signUp(String mobileNo, String password) {
-        return this.apiDao.signUp(mobileNo, password);
-    }
-
-    @Override
-    public Map<String, Object> signout(int userId) {
-        return this.apiDao.updateUserAuthorization(userId, 0);
     }
 
     @Override
@@ -74,7 +59,7 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public Map<String, Object> updatePassword(String emailId, String oldPassword, String newPassword) {
         Map<String, Object> responseMap = new HashMap<>();
-        responseMap = this.apiDao.checkCustomerValidity(emailId, oldPassword);
+        responseMap = this.apiDao.checkCustomerToken(emailId, oldPassword);
         if ((Boolean) responseMap.get("isCustomerValid")) {
             int i = this.apiDao.updatePassword(emailId, newPassword);
             if (i > 0) {

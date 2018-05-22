@@ -13,13 +13,7 @@ import java.util.Map;
  */
 public interface ApiService {
 
-    public Map<String, Object> checkExistingCustomer(String mobileNo);
-
-    public Map<String, Object> signIn(String mobileNo, String password);
-
-    public Map<String, Object> signUp(String mobileNo, String password);
-
-    public Map<String, Object> signout(int userId);
+    public Map<String, Object> signIn(String emailId, String password);
 
     public Map<String, Object> forgotPassword(String emailId);
 

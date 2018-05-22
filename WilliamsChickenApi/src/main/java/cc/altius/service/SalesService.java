@@ -4,6 +4,7 @@
  */
 package cc.altius.service;
 
+import cc.altius.model.DTO.SalesReportDTO;
 import cc.altius.model.Sales;
 import java.util.List;
 
@@ -13,7 +14,9 @@ import java.util.List;
  */
 public interface SalesService {
 
-    public int addSales(Sales sales);
+    public int addSales(Sales sales, int userId);
 
-    public List<Sales> getSalesListReportByDate(String startDate, String endDate);
+    public SalesReportDTO getSalesListReportByDate(String startDate);
+
+    public boolean isExitRecord(String submitDate);
 }
