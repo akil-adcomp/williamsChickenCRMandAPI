@@ -12,6 +12,7 @@ import cc.altius.williamsChicken.exception.CouldNotBuildExcelException;
 import cc.altius.williamsChicken.model.DTO.AccessLogReportDTO;
 import cc.altius.williamsChicken.model.DTO.FCWReportDTO;
 import cc.altius.williamsChicken.model.DTO.PayrollReportDTO;
+import cc.altius.williamsChicken.model.DTO.SalesReportDTO;
 import cc.altius.williamsChicken.model.FCW;
 import cc.altius.williamsChicken.model.Payroll;
 import cc.altius.williamsChicken.model.User;
@@ -109,13 +110,8 @@ public class ReportController {
     public String showFCWReport(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
         String startDate = ServletRequestUtils.getStringParameter(request, "startDate", DateUtils.getCurrentDateString(DateUtils.IST, DateUtils.YMD));
         String stopDate = ServletRequestUtils.getStringParameter(request, "stopDate", DateUtils.getCurrentDateString(DateUtils.IST, DateUtils.YMD));
-
         List<FCWReportDTO> fcwList = this.reportService.getFCWReport(startDate, stopDate);
-//        List<FCW> fcwRepoList = this.reportService.getFCWList(startDate, stopDate);
-//        System.out.println("fcwRepoList ========= " + fcwRepoList.size());
-//        System.out.println("fcwRepoList ========= " + fcwRepoList);
         modelMap.addAttribute("fcwList", fcwList);
-
         modelMap.addAttribute("startDate", startDate);
         modelMap.addAttribute("stopDate", stopDate);
         return "report/reportFCW";
@@ -236,5 +232,18 @@ public class ReportController {
 //            LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog(e));
             throw new CouldNotBuildExcelException(e.getMessage());
         }
+    }
+
+    @RequestMapping(value = "/report/reportSales.htm")
+    public String showSalesReport(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
+        System.out.println("inside sales");
+        String startDate = ServletRequestUtils.getStringParameter(request, "startDate", DateUtils.getCurrentDateString(DateUtils.IST, DateUtils.YMD));
+        String stopDate = ServletRequestUtils.getStringParameter(request, "stopDate", DateUtils.getCurrentDateString(DateUtils.IST, DateUtils.YMD));
+        List<SalesReportDTO> salesList = this.reportService.getSalesReport(startDate, stopDate);
+        System.out.println("startDate "+startDate+" stopDate = "+stopDate+" list == "+salesList);
+        modelMap.addAttribute("salesList", salesList);
+        modelMap.addAttribute("startDate", startDate);
+        modelMap.addAttribute("stopDate", stopDate);
+        return "report/reportSales";
     }
 }

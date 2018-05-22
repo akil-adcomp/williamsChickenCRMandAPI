@@ -11,26 +11,32 @@ import java.util.Date;
  *
  * @author altius
  */
-public class Sales implements Serializable{
+public class Sales implements Serializable {
 
     private int salesId;
     private Store store;
-    private Date submitDate;
-    private int totalSales;
-    private int nonTaxSales;
-    private double netSales;
+    private String submitDate;
+    private double totalSales;
+    private double nonTaxSales;
+    private double NetSales;
     private double salesTax;
     private double grossSales;
-    private int netselsLastWeek;
-    private int amountReceivable;
-    private int totalPaidOuts;
-    private double netSalesLastYear;
-    private double custCount;
+    private double accountReceivable;
+    private double totalPaidOut;
+    private double officerDiscount;
+    private double amountPerBird;
+    private int begningHeadCount;
+    private int storeTransfer;
+    private int purchase;
+    private int chickenUsage;
+    private int birdsWasted;
+    private int birdsOnHand;
+    private int endingEnventory;
+    private int variance;
     private Date createdDate;
     private int createdBy;
     private Date lastModifiedDate;
     private int lastModifiedBy;
-    private User user;
 
     public int getSalesId() {
         return salesId;
@@ -48,36 +54,36 @@ public class Sales implements Serializable{
         this.store = store;
     }
 
-    public Date getSubmitDate() {
+    public String getSubmitDate() {
         return submitDate;
     }
 
-    public void setSubmitDate(Date submitDate) {
+    public void setSubmitDate(String submitDate) {
         this.submitDate = submitDate;
     }
 
-    public int getTotalSales() {
+    public double getTotalSales() {
         return totalSales;
     }
 
-    public void setTotalSales(int totalSales) {
+    public void setTotalSales(double totalSales) {
         this.totalSales = totalSales;
     }
 
-    public int getNonTaxSales() {
+    public double getNonTaxSales() {
         return nonTaxSales;
     }
 
-    public void setNonTaxSales(int nonTaxSales) {
+    public void setNonTaxSales(double nonTaxSales) {
         this.nonTaxSales = nonTaxSales;
     }
 
     public double getNetSales() {
-        return netSales;
+        return NetSales;
     }
 
-    public void setNetSales(double netSales) {
-        this.netSales = netSales;
+    public void setNetSales(double NetSales) {
+        this.NetSales = NetSales;
     }
 
     public double getSalesTax() {
@@ -96,44 +102,100 @@ public class Sales implements Serializable{
         this.grossSales = grossSales;
     }
 
-    public int getNetselsLastWeek() {
-        return netselsLastWeek;
+    public double getAccountReceivable() {
+        return accountReceivable;
     }
 
-    public void setNetselsLastWeek(int netselsLastWeek) {
-        this.netselsLastWeek = netselsLastWeek;
+    public void getAccountReceivable(double getAccountReceivable) {
+        this.accountReceivable = accountReceivable;
     }
 
-    public int getAmountReceivable() {
-        return amountReceivable;
+    public double getTotalPaidOut() {
+        return totalPaidOut;
     }
 
-    public void setAmountReceivable(int amountReceivable) {
-        this.amountReceivable = amountReceivable;
+    public void setTotalPaidOut(double totalPaidOut) {
+        this.totalPaidOut = totalPaidOut;
     }
 
-    public int getTotalPaidOuts() {
-        return totalPaidOuts;
+    public double getOfficerDiscount() {
+        return officerDiscount;
     }
 
-    public void setTotalPaidOuts(int totalPaidOuts) {
-        this.totalPaidOuts = totalPaidOuts;
+    public void setOfficerDiscount(double officerDiscount) {
+        this.officerDiscount = officerDiscount;
     }
 
-    public double getNetSalesLastYear() {
-        return netSalesLastYear;
+    public double getAmountPerBird() {
+        return amountPerBird;
     }
 
-    public void setNetSalesLastYear(double netSalesLastYear) {
-        this.netSalesLastYear = netSalesLastYear;
+    public void setAmountPerBird(double amountPerBird) {
+        this.amountPerBird = amountPerBird;
     }
 
-    public double getCustCount() {
-        return custCount;
+    public int getBegningHeadCount() {
+        return begningHeadCount;
     }
 
-    public void setCustCount(double custCount) {
-        this.custCount = custCount;
+    public void setBegningHeadCount(int begningHeadCount) {
+        this.begningHeadCount = begningHeadCount;
+    }
+
+    public int getStoreTransfer() {
+        return storeTransfer;
+    }
+
+    public void setStoreTransfer(int storeTransfer) {
+        this.storeTransfer = storeTransfer;
+    }
+
+    public int getPurchase() {
+        return purchase;
+    }
+
+    public void setPurchase(int purchase) {
+        this.purchase = purchase;
+    }
+
+    public int getChickenUsage() {
+        return chickenUsage;
+    }
+
+    public void setChickenUsage(int chickenUsage) {
+        this.chickenUsage = chickenUsage;
+    }
+
+    public int getBirdsWasted() {
+        return birdsWasted;
+    }
+
+    public void setBirdsWasted(int birdsWasted) {
+        this.birdsWasted = birdsWasted;
+    }
+
+    public int getBirdsOnHand() {
+        return birdsOnHand;
+    }
+
+    public void setBirdsOnHand(int birdsOnHand) {
+        this.birdsOnHand = birdsOnHand;
+    }
+
+    public int getEndingEnventory() {
+        return endingEnventory;
+    }
+
+    public void setEndingEnventory(int endingEnventory) {
+        this.endingEnventory = endingEnventory;
+    }
+
+    public int getVariance() {
+        return variance;
+    }
+
+    public void setVariance(int variance) {
+        this.variance = variance;
     }
 
     public Date getCreatedDate() {
@@ -168,16 +230,8 @@ public class Sales implements Serializable{
         this.lastModifiedBy = lastModifiedBy;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     @Override
     public String toString() {
-        return "Sales{" + "salesId=" + salesId + ", store=" + store + ", submitDate=" + submitDate + ", totalSales=" + totalSales + ", nonTaxSales=" + nonTaxSales + ", netSales=" + netSales + ", salesTax=" + salesTax + ", grossSales=" + grossSales + ", netselsLastWeek=" + netselsLastWeek + ", amountReceivable=" + amountReceivable + ", totalPaidOuts=" + totalPaidOuts + ", netSalesLastYear=" + netSalesLastYear + ", custCount=" + custCount + ", createdDate=" + createdDate + ", createdBy=" + createdBy + ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy + ", user=" + user + '}';
+        return "Sales{" + "salesId=" + salesId + ", store=" + store + ", submitDate=" + submitDate + ", totalSales=" + totalSales + ", nonTaxSales=" + nonTaxSales + ", NetSales=" + NetSales + ", salesTax=" + salesTax + ", grossSales=" + grossSales + ", accountReceivable=" + accountReceivable + ", totalPaidOut=" + totalPaidOut + ", officerDiscount=" + officerDiscount + ", amountPerBird=" + amountPerBird + ", begningHeadCount=" + begningHeadCount + ", storeTransfer=" + storeTransfer + ", purchase=" + purchase + ", chickenUsage=" + chickenUsage + ", birdsWasted=" + birdsWasted + ", birdsOnHand=" + birdsOnHand + ", endingEnventory=" + endingEnventory + ", variance=" + variance + ", createdDate=" + createdDate + ", createdBy=" + createdBy + ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy + '}';
     }
 }

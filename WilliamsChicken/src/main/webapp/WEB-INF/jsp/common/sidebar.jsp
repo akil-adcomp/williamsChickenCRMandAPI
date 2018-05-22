@@ -27,7 +27,7 @@
         </li>
 
         <li class="active">
-            <a href="../home/home"><span class="fa fa-home"></span> <span class="xn-text">Home</span></a>
+            <a href="../home/home.htm"><span class="fa fa-home"></span> <span class="xn-text">Home</span></a>
         </li>
         <sec:authorize access="hasAnyRole('ROLE_BF_RELOAD_APP_LAYER,ROLE_BF_CREATE_USER,ROLE_BF_LIST_USER')">
             <li class="xn-openable">
@@ -99,6 +99,9 @@
                         </li>
                         <li>
                             <a href="../report/reportPayroll.htm"><span class="fa fa-th-list"></span>Payroll Report</a>
+                        </li>
+                        <li>
+                            <a href="../report/reportSales.htm"><span class="fa fa-th-list"></span>Sales Report</a>
                         </li>
                     </sec:authorize>
                 </ul>

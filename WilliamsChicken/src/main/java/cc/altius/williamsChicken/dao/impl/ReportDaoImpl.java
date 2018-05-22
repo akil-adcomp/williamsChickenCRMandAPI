@@ -9,12 +9,14 @@ import cc.altius.williamsChicken.dao.UserDao;
 import cc.altius.williamsChicken.model.DTO.AccessLogReportDTO;
 import cc.altius.williamsChicken.model.DTO.FCWReportDTO;
 import cc.altius.williamsChicken.model.DTO.PayrollReportDTO;
+import cc.altius.williamsChicken.model.DTO.SalesReportDTO;
 import cc.altius.williamsChicken.model.DTO.mapper.AccessLogReportDTORowMapper;
 import cc.altius.williamsChicken.model.FCW;
 import cc.altius.williamsChicken.model.Payroll;
 import cc.altius.williamsChicken.model.rowMapper.PayrollRowMapper;
 import cc.altius.williamsChicken.model.DTO.mapper.FCWResultSetExtractor;
 import cc.altius.williamsChicken.model.DTO.mapper.PayrollResultSetExtractor;
+import cc.altius.williamsChicken.model.DTO.mapper.SalesResultSetExtractor;
 import cc.altius.williamsChicken.model.rowMapper.FCWRowMapper;
 import java.util.HashMap;
 import java.util.List;
@@ -87,7 +89,7 @@ public class ReportDaoImpl implements ReportDao {
     public List<FCWReportDTO> getFCWReport(String startDate, String stopDate) {
         startDate += " 00:00:00";
         stopDate += " 23:59:59";
-        String sql = "SELECT DATE(f.`CREATED_DATE`) AS`date`,f.`PAID_OUT_AMOUNT`,f.`STORE_ID`,f.`SUBMIT_DATE`,f.`CREATED_BY`,f.`INVOICE`,f.`VENDOR_ID`,f.`AMOUNT`,f.`OF_CHICKEN_PUR`,s.`STORE_NAME`,v.`VENDOR_NAME`,u.`USERNAME` FROM fcw f "
+        String sql = "SELECT DATE(f.`CREATED_DATE`) AS`date`,f.`PAID_OUT_AMOUNT`,f.`STORE_ID`,f.`SUBMIT_DATE`,f.`CREATED_BY`,f.`INVOICE`,f.`VENDOR_ID`,f.`AMOUNT`,f.`OF_CHICKEN_PUR`,s.`STORE_NAME`,IF(v.`VENDOR_ID`=4,f.`DUMMY_VENDOR`,v.`VENDOR_NAME`) AS `VENDOR_NAME`,u.`USERNAME` FROM fcw f "
                 + " LEFT JOIN store s ON f.`STORE_ID`=s.`STORE_ID`"
                 + " LEFT JOIN vendor v ON f.`VENDOR_ID`=v.`VENDOR_ID`"
                 + " LEFT JOIN `user` u ON f.`CREATED_BY`=u.`USER_ID`"
@@ -120,5 +122,17 @@ public class ReportDaoImpl implements ReportDao {
                 + " WHERE f.`CREATED_DATE` BETWEEN ? AND ?"
                 + " GROUP BY f.`STORE_ID`, DATE(f.`CREATED_DATE`),f.`VENDOR_ID`";
         return this.jdbcTemplate.query(sql, new FCWRowMapper(), startDate, stopDate);
+    }
+
+    @Override
+    public List<SalesReportDTO> getSalesReport(String startDate, String stopDate) {
+        startDate += " 00:00:00";
+        stopDate += " 23:59:59";
+        String sql = "SELECT sl.*,s.`STORE_NAME`,DATE(sl.`CREATED_DATE`) AS`date`FROM sales sl"
+                + " LEFT JOIN store s ON sl.`STORE_ID`=s.`STATE_ID`"
+                + " LEFT JOIN `user` u ON sl.`CREATED_BY`=u.`USER_ID`"
+                + " WHERE sl.`CREATED_DATE` BETWEEN ? AND ?"
+                + " ORDER BY sl.`STORE_ID`, DATE(sl.`CREATED_DATE`)";
+        return this.jdbcTemplate.query(sql, new SalesResultSetExtractor(), startDate, stopDate);
     }
 }
