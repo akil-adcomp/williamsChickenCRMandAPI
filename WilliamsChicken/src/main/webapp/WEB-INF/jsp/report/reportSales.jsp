@@ -85,6 +85,7 @@
                                                         <th>Purchase</th>
                                                         <th>Chicken Usage</th>
                                                         <th>Birds Wasted</th>
+
                                                         <th>Bird On Hand</th>
                                                         <th>Ending Enventory</th>
                                                         <th>Variance</th>
@@ -102,6 +103,7 @@
                                                             <td>${item.purchase}</td>
                                                             <td>${item.chickenUsage}</td>
                                                             <td>${item.birdsWasted}</td>
+
                                                             <td>${item.birdsOnHand}</td>
                                                             <td>${item.endingEnventory}</td>
                                                             <td>${item.variance}</td>
@@ -116,8 +118,16 @@
                                                                             <td class="alignCenter">Gross Sales</td>
                                                                             <td class="alignCenter">Account Receivable</td>
                                                                             <td class="alignCenter">Total Paid Out</td>
-                                                                            <td class="alignCenter">Officer Discount</td>
+                                                                            <td class="alignCenter">Uber Account</td>
                                                                             <td class="alignCenter">Amount Per Bird</td>
+                                                                            <td class="alignCenter">Refounds</td>
+                                                                            <td class="alignCenter">Customer Count</td>
+                                                                            <td class="alignCenter">Total Deposit</td>
+                                                                            <td class="alignCenter">Door Dash Account</td>
+                                                                            <td class="alignCenter">Cash</td>
+                                                                            <td class="alignCenter">Check Average</td>
+
+
                                                                             <td class="alignCenter">Net Sales LW</td>
                                                                             <td class="alignCenter">Net Sales LY</td>
                                                                             <td class="alignCenter">Variance LW</td>
@@ -134,12 +144,19 @@
                                                                                 <td>${item1.grossSales}</td>
                                                                                 <td>${item1.accountReceivable}</td>
                                                                                 <td>${item1.totalPaidOut}</td>
-                                                                                <td>${item1.officerDiscount}</td>
+                                                                                <td>${item1.uberAccount}</td>
                                                                                 <td>${item1.amountPerBird}</td>
-                                                                                <td></td>
-                                                                                <td></td>
-                                                                                <td></td>
-                                                                                <td></td>
+                                                                                <td>${item1.refounds}</td>
+                                                                                <td>${item1.customerCount}</td>
+                                                                                <td>${item1.totalDeposit}</td>
+                                                                                <td>${item1.doorDashAccount}</td>
+                                                                                <td>${item1.cash}</td>
+                                                                                <td>${item1.checkAverage}</td>
+
+                                                                                <td>0</td>
+                                                                                <td>0</td>
+                                                                                <td>0</td>
+                                                                                <td>0</td>
                                                                             </tr>
                                                                         </c:forEach>
                                                                     </tbody>

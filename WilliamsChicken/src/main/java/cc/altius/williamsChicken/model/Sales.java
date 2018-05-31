@@ -21,9 +21,9 @@ public class Sales implements Serializable {
     private double NetSales;
     private double salesTax;
     private double grossSales;
-    private double accountReceivable;
+    private double acounntReceivable;
     private double totalPaidOut;
-    private double officerDiscount;
+    private double uberAccount;
     private double amountPerBird;
     private int begningHeadCount;
     private int storeTransfer;
@@ -37,6 +37,11 @@ public class Sales implements Serializable {
     private int createdBy;
     private Date lastModifiedDate;
     private int lastModifiedBy;
+    private int customerCount;
+    private double totalDeposit;
+    private double doorDashAccount;
+    private double cash;
+    private double checkAverage;
 
     public int getSalesId() {
         return salesId;
@@ -102,12 +107,12 @@ public class Sales implements Serializable {
         this.grossSales = grossSales;
     }
 
-    public double getAccountReceivable() {
-        return accountReceivable;
+    public double getAcounntReceivable() {
+        return acounntReceivable;
     }
 
-    public void getAccountReceivable(double getAccountReceivable) {
-        this.accountReceivable = accountReceivable;
+    public void setAcounntReceivable(double acounntReceivable) {
+        this.acounntReceivable = acounntReceivable;
     }
 
     public double getTotalPaidOut() {
@@ -118,12 +123,12 @@ public class Sales implements Serializable {
         this.totalPaidOut = totalPaidOut;
     }
 
-    public double getOfficerDiscount() {
-        return officerDiscount;
+    public double getUberAccount() {
+        return uberAccount;
     }
 
-    public void setOfficerDiscount(double officerDiscount) {
-        this.officerDiscount = officerDiscount;
+    public void setUberAccount(double uberAccount) {
+        this.uberAccount = uberAccount;
     }
 
     public double getAmountPerBird() {
@@ -230,8 +235,48 @@ public class Sales implements Serializable {
         this.lastModifiedBy = lastModifiedBy;
     }
 
+    public int getCustomerCount() {
+        return customerCount;
+    }
+
+    public void setCustomerCount(int customerCount) {
+        this.customerCount = customerCount;
+    }
+
+    public double getTotalDeposit() {
+        return totalDeposit;
+    }
+
+    public void setTotalDeposit(double totalDeposit) {
+        this.totalDeposit = totalDeposit;
+    }
+
+    public double getDoorDashAccount() {
+        return doorDashAccount;
+    }
+
+    public void setDoorDashAccount(double doorDashAccount) {
+        this.doorDashAccount = doorDashAccount;
+    }
+
+    public double getCash() {
+        return cash;
+    }
+
+    public void setCash(double cash) {
+        this.cash = cash;
+    }
+
+    public double getCheckAverage() {
+        return checkAverage;
+    }
+
+    public void setCheckAverage(double checkAverage) {
+        this.checkAverage = checkAverage;
+    }
+
     @Override
     public String toString() {
-        return "Sales{" + "salesId=" + salesId + ", store=" + store + ", submitDate=" + submitDate + ", totalSales=" + totalSales + ", nonTaxSales=" + nonTaxSales + ", NetSales=" + NetSales + ", salesTax=" + salesTax + ", grossSales=" + grossSales + ", accountReceivable=" + accountReceivable + ", totalPaidOut=" + totalPaidOut + ", officerDiscount=" + officerDiscount + ", amountPerBird=" + amountPerBird + ", begningHeadCount=" + begningHeadCount + ", storeTransfer=" + storeTransfer + ", purchase=" + purchase + ", chickenUsage=" + chickenUsage + ", birdsWasted=" + birdsWasted + ", birdsOnHand=" + birdsOnHand + ", endingEnventory=" + endingEnventory + ", variance=" + variance + ", createdDate=" + createdDate + ", createdBy=" + createdBy + ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy + '}';
+        return "Sales{" + "salesId=" + salesId + ", store=" + store + ", submitDate=" + submitDate + ", totalSales=" + totalSales + ", nonTaxSales=" + nonTaxSales + ", NetSales=" + NetSales + ", salesTax=" + salesTax + ", grossSales=" + grossSales + ", acounntReceivable=" + acounntReceivable + ", totalPaidOut=" + totalPaidOut + ", uberAccount=" + uberAccount + ", amountPerBird=" + amountPerBird + ", begningHeadCount=" + begningHeadCount + ", storeTransfer=" + storeTransfer + ", purchase=" + purchase + ", chickenUsage=" + chickenUsage + ", birdsWasted=" + birdsWasted + ", birdsOnHand=" + birdsOnHand + ", endingEnventory=" + endingEnventory + ", variance=" + variance + ", createdDate=" + createdDate + ", createdBy=" + createdBy + ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy + ", customerCount=" + customerCount + ", totalDeposit=" + totalDeposit + ", doorDashAccount=" + doorDashAccount + ", cash=" + cash + ", checkAverage=" + checkAverage + '}';
     }
 }

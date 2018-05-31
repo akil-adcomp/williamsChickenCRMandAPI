@@ -31,6 +31,7 @@ public class SalesReportDTO implements Serializable {
     private int variance;
     private User user;
     private List<SalesDetails> salesDetails;
+    private double refounds;
 
     public SalesReportDTO() {
         salesDetails = new LinkedList<>();
@@ -140,8 +141,16 @@ public class SalesReportDTO implements Serializable {
         this.salesDetails = salesDetails;
     }
 
+    public double getRefounds() {
+        return refounds;
+    }
+
+    public void setRefounds(double refounds) {
+        this.refounds = refounds;
+    }
+
     @Override
     public String toString() {
-        return "SalesReportDTO{" + "date=" + date + ", store=" + store + ", submitDate=" + submitDate + ", begningHeadCount=" + begningHeadCount + ", storeTransfer=" + storeTransfer + ", purchase=" + purchase + ", chickenUsage=" + chickenUsage + ", birdsWasted=" + birdsWasted + ", birdsOnHand=" + birdsOnHand + ", endingEnventory=" + endingEnventory + ", variance=" + variance + ", user=" + user + ", salesDetails=" + salesDetails + '}';
+        return "SalesReportDTO{" + "date=" + date + ", store=" + store + ", submitDate=" + submitDate + ", begningHeadCount=" + begningHeadCount + ", storeTransfer=" + storeTransfer + ", purchase=" + purchase + ", chickenUsage=" + chickenUsage + ", birdsWasted=" + birdsWasted + ", birdsOnHand=" + birdsOnHand + ", endingEnventory=" + endingEnventory + ", variance=" + variance + ", user=" + user + ", salesDetails=" + salesDetails + ", refounds=" + refounds + '}';
     }
 }

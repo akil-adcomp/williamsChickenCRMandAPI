@@ -21,7 +21,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
  * @author altius
  */
 public class SalesResultSetExtractor implements ResultSetExtractor<List<SalesReportDTO>> {
-
+    
     @Override
     public List<SalesReportDTO> extractData(ResultSet rs) throws SQLException, DataAccessException {
         int oldStoreId = 0;
@@ -50,6 +50,7 @@ public class SalesResultSetExtractor implements ResultSetExtractor<List<SalesRep
                 sales.setBegningHeadCount(rs.getInt("BEGNING_HEAD_COUNT"));
                 sales.setBirdsOnHand(rs.getInt("BIRDS_ON_HAND"));
                 sales.setBirdsWasted(rs.getInt("BIRDS_WASTED"));
+                
                 sales.setChickenUsage(rs.getInt("CHICKEN_USAGE"));
                 sales.setEndingEnventory(rs.getInt("ENDING_INVENTORY"));
                 sales.setStoreTransfer(rs.getInt("STORE_TRANSFER"));
@@ -57,17 +58,22 @@ public class SalesResultSetExtractor implements ResultSetExtractor<List<SalesRep
                 sales.setVariance(rs.getInt("VARIANCE"));
                 sales.setSubmitDate(rs.getTimestamp("SUBMIT_DATE"));
             }
-
+            
             SalesDetails salesDetails = new SalesDetails();
-            salesDetails.setAcounntReceivable(rs.getDouble("ACCOUNT_RECEIVABLE"));
+            salesDetails.setAccountReceivable(rs.getDouble("ACCOUNT_RECEIVABLE"));
             salesDetails.setAmountPerBird(rs.getDouble("AMOUNT_PER_BIRD"));
             salesDetails.setGrossSales(rs.getDouble("GROSS_SALES"));
             salesDetails.setNetSales(rs.getDouble("NET_SALES"));
             salesDetails.setNonTaxSales(rs.getDouble("NON_TAX_SALES"));
-            salesDetails.setOfficerDiscount(rs.getDouble("OFFICER_DISCOUNT"));
+            salesDetails.setUberAccount(rs.getDouble("UBER_ACCOUNT"));
             salesDetails.setSalesTax(rs.getDouble("SALES_TAX"));
             salesDetails.setTotalPaidOut(rs.getDouble("TOTAL_PAID_OUT"));
             salesDetails.setTotalSales(rs.getDouble("TOTAL_SALES"));
+            salesDetails.setTotalDeposit(rs.getDouble("TOTAL_DEPOSIT"));
+            salesDetails.setDoorDashAccount(rs.getDouble("DOOR_DASH_ACCOUNT"));
+            salesDetails.setCash(rs.getDouble("CASH"));
+            salesDetails.setCheckAverage(rs.getDouble("CHECK_AVERAGE"));
+            salesDetails.setRefounds(rs.getDouble("REFOUNDS"));
             sales.getSalesDetails().add(salesDetails);
             oldStoreId = newStoreId;
             oldCreatedDate = newCreated;

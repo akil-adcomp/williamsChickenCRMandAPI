@@ -19,8 +19,14 @@ public class SalesDetails implements Serializable {
     private double grossSales;
     private double accountReceivable;
     private double totalPaidOut;
-    private double officerDiscount;
+    private double uberAccount;
     private double amountPerBird;
+    private int customerCount;
+    private double totalDeposit;
+    private double doorDashAccount;
+    private double cash;
+    private double checkAverage;
+    private double refounds;
 
     public double getTotalSales() {
         return totalSales;
@@ -66,7 +72,7 @@ public class SalesDetails implements Serializable {
         return accountReceivable;
     }
 
-    public void setAcounntReceivable(double accountReceivable) {
+    public void setAccountReceivable(double accountReceivable) {
         this.accountReceivable = accountReceivable;
     }
 
@@ -78,12 +84,12 @@ public class SalesDetails implements Serializable {
         this.totalPaidOut = totalPaidOut;
     }
 
-    public double getOfficerDiscount() {
-        return officerDiscount;
+    public double getUberAccount() {
+        return uberAccount;
     }
 
-    public void setOfficerDiscount(double officerDiscount) {
-        this.officerDiscount = officerDiscount;
+    public void setUberAccount(double uberAccount) {
+        this.uberAccount = uberAccount;
     }
 
     public double getAmountPerBird() {
@@ -94,8 +100,56 @@ public class SalesDetails implements Serializable {
         this.amountPerBird = amountPerBird;
     }
 
+    public int getCustomerCount() {
+        return customerCount;
+    }
+
+    public void setCustomerCount(int customerCount) {
+        this.customerCount = customerCount;
+    }
+
+    public double getTotalDeposit() {
+        return totalDeposit;
+    }
+
+    public void setTotalDeposit(double totalDeposit) {
+        this.totalDeposit = totalDeposit;
+    }
+
+    public double getDoorDashAccount() {
+        return doorDashAccount;
+    }
+
+    public void setDoorDashAccount(double doorDashAccount) {
+        this.doorDashAccount = doorDashAccount;
+    }
+
+    public double getCash() {
+        return cash;
+    }
+
+    public void setCash(double cash) {
+        this.cash = cash;
+    }
+
+    public double getCheckAverage() {
+        return checkAverage;
+    }
+
+    public void setCheckAverage(double checkAverage) {
+        this.checkAverage = checkAverage;
+    }
+
+    public double getRefounds() {
+        return refounds;
+    }
+
+    public void setRefounds(double refounds) {
+        this.refounds = refounds;
+    }
+
     @Override
     public String toString() {
-        return "SalesDetails{" + "totalSales=" + totalSales + ", nonTaxSales=" + nonTaxSales + ", NetSales=" + NetSales + ", salesTax=" + salesTax + ", grossSales=" + grossSales + ", accountReceivable=" + accountReceivable + ", totalPaidOut=" + totalPaidOut + ", officerDiscount=" + officerDiscount + ", amountPerBird=" + amountPerBird + '}';
+        return "SalesDetails{" + "totalSales=" + totalSales + ", nonTaxSales=" + nonTaxSales + ", NetSales=" + NetSales + ", salesTax=" + salesTax + ", grossSales=" + grossSales + ", accountReceivable=" + accountReceivable + ", totalPaidOut=" + totalPaidOut + ", uberAccount=" + uberAccount + ", amountPerBird=" + amountPerBird + ", customerCount=" + customerCount + ", totalDeposit=" + totalDeposit + ", doorDashAccount=" + doorDashAccount + ", cash=" + cash + ", checkAverage=" + checkAverage + ", refounds=" + refounds + '}';
     }
 }
