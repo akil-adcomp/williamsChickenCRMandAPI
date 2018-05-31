@@ -16,7 +16,7 @@ import org.springframework.jdbc.core.RowMapper;
  * @author altius
  */
 public class SalesRowMapper implements RowMapper<Sales> {
-
+    
     @Override
     public Sales mapRow(ResultSet rs, int i) throws SQLException {
         Sales data = new Sales();
@@ -34,7 +34,7 @@ public class SalesRowMapper implements RowMapper<Sales> {
         data.setLastModifiedDate(rs.getDate("LAST_MODIFIED_DATE"));
         data.setNetSales(rs.getDouble("NET_SALES"));
         data.setNonTaxSales(rs.getDouble("NON_TAX_SALES"));
-        data.setOfficerDiscount(rs.getDouble("OFFICER_DISCOUNT"));
+        data.setUberAccount(rs.getDouble("UBER_ACCOUNT"));
         data.setPurchase(rs.getInt("PURCHASE"));
         data.setSalesId(rs.getInt("SALE_ID"));
         data.setSalesTax(rs.getDouble("SALES_TAX"));

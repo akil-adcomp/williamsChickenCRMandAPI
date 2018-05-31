@@ -49,15 +49,13 @@ public class SalesDaoImpl implements SalesDao {
         String curDate = DateUtils.getCurrentDateString(DateUtils.IST, DateUtils.YMDHMS);
         SimpleJdbcInsert salesInsert = new SimpleJdbcInsert(this.dataSource).withTableName("sales").usingGeneratedKeyColumns("SALES_ID");
         Map<String, Object> params = new HashMap<>();
-
         Date cdate = null;
-        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         try {
             cdate = (Date) dateFormat.parse(sales.getSubmitDate());
         } catch (ParseException ex) {
             Logger.getLogger(SalesDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
-
 
         params.put("STORE_ID", sales.getStore().getStoreId());
         params.put("SUBMIT_DATE", cdate);
@@ -66,9 +64,9 @@ public class SalesDaoImpl implements SalesDao {
         params.put("NET_SALES", sales.getNetSales());
         params.put("SALES_TAX", sales.getSalesTax());
         params.put("GROSS_SALES", sales.getGrossSales());
-        params.put("ACOUNT_RECEIVABLE", sales.getAcounntReceivable());
+        params.put("ACCOUNT_RECEIVABLE", sales.getAcounntReceivable());
         params.put("TOTAl_PAID_OUT", sales.getTotalPaidOut());
-        params.put("OFFICER_DISCOUNT", sales.getOfficerDiscount());
+        params.put("UBER_ACCOUNT", sales.getUberAccount());
         params.put("AMOUNT_PER_BIRD", sales.getAmountPerBird());
         params.put("BEGNING_HEAD_COUNT", sales.getBegningHeadCount());
         params.put("STORE_TRANSFER", sales.getStoreTransfer());
@@ -82,6 +80,12 @@ public class SalesDaoImpl implements SalesDao {
         params.put("CREATED_BY", userId);
         params.put("LAST_MODIFIED_DATE", curDate);
         params.put("LAST_MODIFIED_BY", userId);
+        params.put("CUSTOMER_COUNT", sales.getCustomerCount());
+        params.put("TOTAL_DEPOSIT", sales.getTotalDeposit());
+        params.put("DOOR_DASH_ACCOUNT", sales.getDoorDashAccount());
+        params.put("CASH", sales.getCash());
+        params.put("CHECK_AVERAGE", sales.getCheckAverage());
+        params.put("REFOUNDS", sales.getRefounds());
 
         return salesInsert.executeAndReturnKey(params).intValue();
     }
