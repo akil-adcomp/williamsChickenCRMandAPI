@@ -98,10 +98,10 @@ public class SalesDaoImpl implements SalesDao {
     }
 
     @Override
-    public boolean isExitRecord(String submitDate) {
+    public boolean isExitRecord(String submitDate, int storeId) {
         String sql = "SELECT COUNT(s.`SUBMIT_DATE`) AS rem FROM sales s"
-                + " WHERE s.`SUBMIT_DATE` = ?";
-        return this.jdbcTemplate.queryForObject(sql, boolean.class, submitDate);
+                + " WHERE s.`SUBMIT_DATE` = ? AND s.`STORE_ID`= ?";
+        return this.jdbcTemplate.queryForObject(sql, boolean.class, submitDate, storeId);
 
     }
 }

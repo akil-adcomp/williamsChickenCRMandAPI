@@ -33,7 +33,7 @@ public class SalesServiceImpl implements SalesService {
     }
 
     @Override
-    public boolean isExitRecord(String submitDate) {
-        return this.salesDao.isExitRecord(submitDate);
+    public boolean isExitRecord(String submitDate, int storeId) {
+        return this.salesDao.isExitRecord(submitDate, storeId);
     }
 }

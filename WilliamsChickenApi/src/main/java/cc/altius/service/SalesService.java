@@ -18,5 +18,5 @@ public interface SalesService {
 
     public SalesReportDTO getSalesListReportByDate(String startDate);
 
-    public boolean isExitRecord(String submitDate);
+    public boolean isExitRecord(String submitDate, int storeId);
 }

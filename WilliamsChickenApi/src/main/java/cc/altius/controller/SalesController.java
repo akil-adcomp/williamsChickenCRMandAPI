@@ -124,6 +124,8 @@ public class SalesController {
     public ResponseEntity getSalesReport(
             @ApiParam(name = "token", value = "Token for authentication", required = true)
             @RequestHeader(value = "token") String token,
+            @ApiParam(name = "storeId", value = "App for Store Id", required = true)
+            @RequestHeader(value = "storeId") int storeId,
             @ApiParam(name = "apptoken", value = "APP Token for authentication", required = true)
             @RequestHeader(value = "apptoken") String appToken,
             @ApiParam(name = "startDate", value = "Start Date for report", required = true)
@@ -136,7 +138,7 @@ public class SalesController {
                 LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog(" token :" + token));
                 LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog(" token :" + token));
                 ValidToken validToken = this.apiService.validateToken(token, userId);
-                boolean isExitRecord = this.salesService.isExitRecord(startDate);
+                boolean isExitRecord = this.salesService.isExitRecord(startDate, storeId);
                 if (validToken.isIsValid()) {
                     LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Valid Request"));
                     LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Valid Request"));
