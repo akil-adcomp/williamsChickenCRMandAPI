@@ -27,9 +27,9 @@
 
                 <!-- START BREADCRUMB -->
                 <ul class="breadcrumb">
-                    <li><a href="../home/home">Home</a></li>
-                    <li><a href="../home/home">Admin</a></li>
-                    <li><a href="../home/home">User</a></li>
+                    <li><a href="../home/home.htm">Home</a></li>
+                    <li><a href="../home/home.htm">Admin</a></li>
+                    <li><a href="../home/home.htm">User</a></li>
                     <li><a href="#">Add User</a></li>
                 </ul>
                 <!-- END BREADCRUMB --> 
@@ -108,12 +108,12 @@
                                             </div>
                                         </div>
                                     </div> 
-                                                
+
                                     <div class="panel-footer">
                                         <div class="pull-right">
                                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />        
                                             <button type="submit" id="_submit" name="btnSubmit"  class="btn btn-success" onclick="generatePassword();">Submit</button>
-                                            <button type="submit" id="_cancel" name="_cancel" class="btn btn-primary" formnovalidate="formnovalidate"><spring:message code="button.Cancel"/></button>
+                                            <button type="button" id="_cancel" name="_cancel" class="btn btn-primary" formnovalidate="formnovalidate"><spring:message code="button.Cancel"/></button>
                                         </div>  
                                     </div>
                                 </div>
@@ -156,11 +156,6 @@
                     },
                     username:{
                         required:true
-                    },
-                    phoneNo:{
-                        required: true,
-                        minlength: 10,
-                        number:true
                     }
                 },
                 errorPlacement: function(error, element) {
@@ -201,6 +196,10 @@
                     });
                 }
             }
+            
+            $('#_cancel').click(function(){
+                window.location = '../home/home.htm?msg=msg.actionCancelled';
+            });
             
         </script>
     </body>

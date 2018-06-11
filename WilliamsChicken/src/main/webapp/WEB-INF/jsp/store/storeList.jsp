@@ -28,8 +28,8 @@
 
                 <!-- START BREADCRUMB -->
                 <ul class="breadcrumb">
-                    <li><a href="../home/home">Home</a></li>
-                    <li><a href="../home/home">Store</a></li>
+                    <li><a href="../home/home.htm">Home</a></li>
+                    <li><a href="../home/home.htm">Store</a></li>
                     <li><a href="#">List Store</a></li>
                 </ul>
                 <!-- END BREADCRUMB --> 

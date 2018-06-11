@@ -27,8 +27,8 @@
 
                 <!-- START BREADCRUMB -->
                 <ul class="breadcrumb">
-                    <li><a href="../home/home">Home</a></li>
-                    <li><a href="../home/home">Manager</a></li>
+                    <li><a href="../home/home.htm">Home</a></li>
+                    <li><a href="../home/home.htm">Manager</a></li>
                     <li><a href="#">Add Manager</a></li>
                 </ul>
                 <!-- END BREADCRUMB --> 
@@ -81,7 +81,7 @@
                                     <div class="panel-footer">
                                         <div class="pull-right">      
                                             <button type="submit" id="_submit" name="btnSubmit"  class="btn btn-success"><spring:message code="button.Update"/></button>
-                                            <button type="submit" id="_cancel" name="_cancel" class="btn btn-primary" ><spring:message code="button.Cancel"/></button>
+                                            <button type="button" id="_cancel" name="_cancel" class="btn btn-primary" ><spring:message code="button.Cancel"/></button>
                                         </div>  
                                     </div>
                                 </div>
@@ -110,6 +110,10 @@
         <script type="text/javascript" src="../js/plugins.js"></script>
         <script type="text/javascript" src="../js/actions.js"></script>
         <!-- END TEMPLATE -->
-
+        <script type="text/javascript">
+            $('#_cancel').click(function(){
+                window.location = '../home/home.htm?msg=msg.actionCancelled';
+            });
+        </script>
     </body>
 </html>

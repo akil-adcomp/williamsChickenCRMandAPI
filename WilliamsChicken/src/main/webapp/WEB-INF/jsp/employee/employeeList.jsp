@@ -28,8 +28,8 @@
 
                 <!-- START BREADCRUMB -->
                 <ul class="breadcrumb">
-                    <li><a href="../home/home">Home</a></li>
-                    <li><a href="../home/home">Manager</a></li>
+                    <li><a href="../home/home.htm">Home</a></li>
+                    <li><a href="../home/home.htm">Manager</a></li>
                     <li><a href="#">List Manager</a></li>
                 </ul>
                 <!-- END BREADCRUMB --> 
@@ -88,8 +88,8 @@
                                                             <td><c:out value="${item.user.username}"/></td>
                                                             <td><c:if test="${item.active==true}"><spring:message code="yes"/></c:if>
                                                                 <c:if test="${item.active==false}"><spring:message code="no"/></c:if>
-                                                            </td>
-                                                            <td><a href="#" title="Edit Employee" onclick="editFunction(${item.employeeId});"><spna class="fa fa-pencil"></spna> Edit</a></td>   
+                                                                </td>
+                                                                <td><a href="#" title="Edit Employee" onclick="editFunction(${item.employeeId});"><spna class="fa fa-pencil"></spna> Edit</a></td>   
                                                         </tr>
                                                     </c:forEach>
                                                 </tbody>

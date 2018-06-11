@@ -27,8 +27,8 @@
 
                 <!-- START BREADCRUMB -->
                 <ul class="breadcrumb">
-                    <li><a href="../home/home">Home</a></li>
-                    <li><a href="../home/home">User</a></li>
+                    <li><a href="../home/home.htm">Home</a></li>
+                    <li><a href="../home/home.htm">User</a></li>
                     <li><a href="#">List User</a></li>
                 </ul>
                 <!-- END BREADCRUMB --> 
@@ -46,7 +46,7 @@
                                     <h3 class="panel-title"><spring:message code="title.userList"/></h3>
                                     <ul class="panel-controls">
                                         <sec:authorize access="hasAnyRole('ROLE_BF_CREATE_USER')">
-                                            <li><a href="../admin/addUser"><span class="fa fa-plus"></span></a></li>
+                                            <li><a href="../admin/addUser.htm"><span class="fa fa-plus"></span></a></li>
                                                 </sec:authorize>
                                         <li><a href="#" class="panel-refresh"><span class="fa fa-refresh"></span></a></li>
                                     </ul>
