@@ -40,6 +40,21 @@
         <property name="validationQuery" value="${jdbc.validationQuery}" />
         <!--<property name="useSSL" value="false" />-->
     </bean> 
+    
+    <bean id="javaMailSender" class ="org.springframework.mail.javamail.JavaMailSenderImpl" >
+        <property name="username" value="manish.v@altius.cc" />
+        <property name="password" value="manish88!" />
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.host">smtp.gmail.com</prop>
+                <prop key="mail.smtp.port">465</prop>
+                <prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.smtp.timeout">2000</prop>
+            </props>
+        </property>
+    </bean>
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource" />
@@ -48,7 +63,7 @@
     <bean id="badCredentialsEvent" class="cc.altius.williamsChicken.security.applicationListener.BadCredentialsEvent"/>
     <bean id="successEvent" class="cc.altius.williamsChicken.security.applicationListener.SuccessEvent"/>
     
-        <bean id="propertyConfigurer"  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <bean id="propertyConfigurer"  class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
                 <value>WEB-INF/jdbc.properties</value>
@@ -58,4 +73,5 @@
 
     
     <util:properties id="versionProperties" location="WEB-INF/version.properties"></util:properties>
+    <util:properties id="schedulerSettings" location="file:/home/altius/williamsChicken/scheduler.properties" />
 </beans>

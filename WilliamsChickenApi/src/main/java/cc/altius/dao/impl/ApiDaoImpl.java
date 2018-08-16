@@ -8,7 +8,7 @@ import cc.altius.dao.ApiDao;
 import cc.altius.model.DTO.LoginUserDetails;
 import cc.altius.model.DTO.Mapper.LoginUserDetailsRowMapper;
 import cc.altius.model.Token;
-import cc.altius.model.ValidToken;
+import cc.altius.model.ValidTokenAndExpDate;
 import cc.altius.model.mapper.TokenRowMapper;
 import cc.altius.utils.DateUtils;
 import cc.altius.utils.ErrorConstants;
@@ -48,16 +48,17 @@ public class ApiDaoImpl implements ApiDao {
     }
 
     @Override
-    public Map<String, Object> checkCustomerToken(String emailId, String password) {
+    public Map<String, Object> checkCustomerToken(int userId, String password) {
         Map<String, Object> responseMap = new HashMap<>();
-        String sql = " SELECT u.`PASSWORD` FROM `user` u WHERE u.`USER_ID`";
+        String sql = " SELECT u.`PASSWORD` FROM `user` u WHERE u.`USER_ID` = ?";
 
         try {
-            String dbPassword = this.jdbcTemplate.queryForObject(sql, String.class, emailId);
+            String dbPassword = this.jdbcTemplate.queryForObject(sql, String.class, userId);
             LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog(" dbPassword :" + dbPassword));
             LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog(" dbPassword :" + dbPassword));
 
             PasswordEncoder encoder = new BCryptPasswordEncoder();
+//            encoder.encode(password);
             if (encoder.matches(password, dbPassword)) {
                 responseMap.put("isCustomerValid", true);
                 LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog(" Valid User "));
@@ -204,15 +205,15 @@ public class ApiDaoImpl implements ApiDao {
     }
 
     @Override
-    public int updatePassword(String emailId, String newPassword) {
+    public int updatePassword(int userId, String newPassword) {
 
         //Get B-crypt password and update db
         PasswordEncoder encoder = new BCryptPasswordEncoder();
-        String encryptedPassword = encoder.encode(newPassword);
 
         //Update password 
-        String sql = "UPDATE `user` u SET u.`PASSWORD`=?  WHERE u.`EMAIL_ID`=? ";
-        int j = this.jdbcTemplate.update(sql, encryptedPassword, emailId);
+        String sql = "UPDATE `user` u SET u.`PASSWORD`=?  WHERE u.`USER_ID`=? ";
+        String encryptedPassword = encoder.encode(newPassword);
+        int j = this.jdbcTemplate.update(sql, encryptedPassword, userId);
         LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog(" Updated Count" + j));
         LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog(" Updated Count" + j));
         return j;
@@ -222,14 +223,14 @@ public class ApiDaoImpl implements ApiDao {
      * Returns true if the Token is valid and false if it is not valid
      */
     @Override
-    public ValidToken validateToken(String token, int userId) {
+    public ValidTokenAndExpDate validateToken(String token, int userId) {
         try {
             Date curDate = DateUtils.getCurrentDateObject(DateUtils.IST);
             String sql = "SELECT IF(COUNT(*)>0,1,0) AS isValid from user u  where u.TOKEN=? AND u.EXPIRY_DATE>=? AND u.`USER_ID`=" + userId;
-            return this.jdbcTemplate.queryForObject(sql, new RowMapper<ValidToken>() {
+            return this.jdbcTemplate.queryForObject(sql, new RowMapper<ValidTokenAndExpDate>() {
                 @Override
-                public ValidToken mapRow(ResultSet rs, int i) throws SQLException {
-                    ValidToken sss = new ValidToken();
+                public ValidTokenAndExpDate mapRow(ResultSet rs, int i) throws SQLException {
+                    ValidTokenAndExpDate sss = new ValidTokenAndExpDate();
                     sss.setIsValid(rs.getBoolean("isValid"));
                     return sss;
                 }

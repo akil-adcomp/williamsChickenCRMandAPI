@@ -14,13 +14,16 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -44,23 +47,32 @@ public class FCWDaoImpl implements FCWDao {
     @Override
     public int addFCW(List<FCW> fcws, int userId) {
         int fcwId = 1;
+        FCW fcwObj = fcws.get(0);
+        Date cdate = null;
+        DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+        try {
+            cdate = (Date) dateFormat.parse(fcwObj.getSubmitDate());
+        } catch (ParseException ex) {
+            Logger.getLogger(FCWDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        int storeId = fcwObj.getStore().getStoreId();
         String curDate = DateUtils.getCurrentDateString(DateUtils.IST, DateUtils.YMDHMS);
-        String sql1 = "INSERT INTO fcw VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql1 = "INSERT INTO fcw VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?)";
         List<Object[]> batchParams = new ArrayList<>();
         for (FCW fcw : fcws) {
-            Date cdate = null;
-            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-            try {
-                cdate = (Date) dateFormat.parse(fcw.getSubmitDate());
-            } catch (ParseException ex) {
-                Logger.getLogger(FCWDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            Object[] tmp = {fcw.getStore().getStoreId(), fcw.getVendor().getVendorId(), fcw.getInvoice(), fcw.getAmount(), cdate, fcw.getPaidOutAmount(), fcw.getOfChickenPur(), curDate, userId, curDate, userId, fcw.getDummyVendor()};
+            Object[] tmp = {storeId, fcw.getVendor().getVendorId(), fcw.getInvoice(), fcw.getAmount(), cdate, fcw.getNoOfStoreTranscation(), curDate, userId, curDate, userId, fcw.getDummyVendor()};
             batchParams.add(tmp);
         }
 
         int[] insertId = this.jdbcTemplate.batchUpdate(sql1, batchParams);
         if (insertId.length > 0) {
+            SimpleJdbcInsert insert = new SimpleJdbcInsert(dataSource).withTableName("fcw_paid_outs");
+            Map<String, Object> params = new HashMap<>();
+            params.put("STORE_ID", storeId);
+            params.put("SUBMIT_DATE", cdate);
+            params.put("PAID_OUTS", fcwObj.getPaidOutAmount());
+            insert.execute(params);
+
             fcwId = 1;
         } else {
             fcwId = 0;
@@ -91,4 +103,23 @@ public class FCWDaoImpl implements FCWDao {
                 + " WHERE f.`CREATED_DATE` BETWEEN ? AND ?";
         return this.jdbcTemplate.query(sql, new FCWDetailsRowMapper(), startDate, stopDate);
     }
+
+    @Override
+    public double getTotalPaidOutsByDateAndStoreId(String submitDate, int storeId) {
+        double totalPaidOuts = 0.00;
+        String sql = " SELECT SUM(f.`PAID_OUTS`) AS paidOuts FROM fcw_paid_outs f WHERE f.`STORE_ID`=? AND DATE(f.`SUBMIT_DATE`)=?;";
+        try {
+            totalPaidOuts = this.jdbcTemplate.queryForObject(sql, Integer.class, storeId, submitDate);
+        } catch (Exception e) {
+            totalPaidOuts = 0.00;
+        }
+        return totalPaidOuts;
+    }
+
+    @Override
+    public boolean isFCWRecordExit(String submitDate, int storeId) {
+        String sql = " SELECT COUNT(b.`SUBMIT_DATE`) AS rem FROM fcw b WHERE DATE(b.`SUBMIT_DATE`)=? AND b.`STORE_ID`=?;";
+        return this.jdbcTemplate.queryForObject(sql, boolean.class, submitDate, storeId);
+    }
+
 }

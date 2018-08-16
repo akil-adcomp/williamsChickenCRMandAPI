@@ -6,8 +6,7 @@ package cc.altius.controller;
 
 import cc.altius.model.Employee;
 import cc.altius.model.ResponseFormat;
-import cc.altius.model.Sales;
-import cc.altius.model.ValidToken;
+import cc.altius.model.ValidTokenAndExpDate;
 import cc.altius.service.ApiService;
 import cc.altius.service.EmployeeService;
 import cc.altius.utils.ErrorConstants;
@@ -42,8 +41,8 @@ public class EmployeeController {
 
     @PostMapping(value = "/getEmployeeList", produces = "application/json;charset=UTF-8")
     @ApiOperation(value = "Get Employee List",
-    notes = "Get Employee List",
-    response = Employee.class)
+            notes = "Get Employee List",
+            response = Employee.class)
     @ApiResponses(value = {
         @ApiResponse(code = 200, response = Boolean.class, message = "OK"),
         @ApiResponse(code = 401, response = ResponseFormat.class, message = "INVALID TOKEN"),
@@ -61,8 +60,8 @@ public class EmployeeController {
         Map<String, Object> responseMap = null;
         if (appToken.equals(williamsChickenApiToken)) {
             try {
-//                ValidToken validToken = this.apiService.validateToken(token, userId);
-//                if (validToken.isIsValid()) {
+                ValidTokenAndExpDate validToken = this.apiService.validateToken(token, userId);
+                if (validToken.isIsValid()) {
                     LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Valid Request"));
                     LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Valid Request"));
                     responseMap = this.apiService.getTokenByUserId(userId);
@@ -76,12 +75,12 @@ public class EmployeeController {
                         responseFormat.setParameter("UserId :" + userId);
                         return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
                     }
-//                } else {
-//                    responseFormat.setStatus("failed");
-//                    responseFormat.setFailedReason("INVALID_TOKEN");
-//                    responseFormat.setFailedValue(ErrorConstants.INVALID_TOKEN);
-//                    return new ResponseEntity(responseFormat, HttpStatus.UNAUTHORIZED);
-//                }
+                } else {
+                    responseFormat.setStatus("failed");
+                    responseFormat.setFailedReason("INVALID_TOKEN");
+                    responseFormat.setFailedValue(ErrorConstants.INVALID_TOKEN);
+                    return new ResponseEntity(responseFormat, HttpStatus.UNAUTHORIZED);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
@@ -93,7 +92,7 @@ public class EmployeeController {
             }
         } else {
             responseFormat.setStatus("Failed");
-            responseFormat.setFailedReason("Invalid token");
+            responseFormat.setFailedReason("You are using older version of APP");
             responseFormat.setFailedValue(ErrorConstants.INVALID_VERSION_TOKEN);
             return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
 

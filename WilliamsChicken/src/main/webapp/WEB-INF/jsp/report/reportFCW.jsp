@@ -28,9 +28,10 @@
 
                 <!-- START BREADCRUMB -->
                 <ul class="breadcrumb">
-                    <li><a href="../home/home">Home</a></li>
-                    <li><a href="../home/home">Reports</a></li>
+                    <li><a href="../home/home.htm">Home</a></li>
+                    <li><a href="../home/home.htm">Reports</a></li>
                     <li><a href="#">FCW Report</a></li>
+
                 </ul>
                 <!-- END BREADCRUMB --> 
 
@@ -46,7 +47,7 @@
                                 <div class="panel-heading">
                                     <h3 class="panel-title">FCW Report</h3>
                                     <ul class="panel-controls">
-                                        <%--   <c:if test="${fn:length(fcwList)>0}"><li><a href="#" onclick="$('#excelForm').submit();" title="Export to excel"><span class="fa fa-file-excel-o"></span></a></li></c:if>--%>
+                                        <c:if test="${fn:length(fcwList)>0}"><li><a href="#" onclick="$('#excelForm').submit();" title="Export to excel"><span class="fa fa-file-excel-o"></span></a></li></c:if>
                                         <li><a href="#" class="panel-refresh"><span class="fa fa-refresh"></span></a></li>
                                     </ul>
                                 </div>
@@ -87,8 +88,8 @@
                                                         <th>Submit Date</th>
                                                         <th>Manager Name</th>
                                                         <th>Total Amount</th>
-                                                        <th>Total Chicken</th>
-                                                        <th>Total Paid</th>
+                                                        <!--<th>Total Chicken</th>-->
+                                                        <!--<th>Total Paid</th>-->
                                                         <th>Details</th>
                                                     </tr>
                                                 </thead>
@@ -100,8 +101,8 @@
                                                             <td><fmt:formatDate value="${item.submitDate}" pattern="dd-MM-yyyy"/></td>
                                                             <td>${item.user.username}</td>
                                                             <td>${item.totalAmount}</td>
-                                                            <td>${item.chickenTotal}</td>
-                                                            <td>${item.totalPaidAmount}</td>
+<!--                                                            <td>${item.chickenTotal}</td>-->
+                                                            <!--<td>${item.totalPaidAmount}</td>-->
                                                             <td style="width: 50%">
                                                                 <table class="table table-condensed table-bordered">
                                                                     <thead>
@@ -109,8 +110,8 @@
                                                                             <td>Vendor Name</td>
                                                                             <td class="alignCenter">Invoice Number</td>
                                                                             <td class="alignCenter">Amount</td>
-                                                                            <td class="alignCenter"># Of Chicken</td>
-                                                                            <td class="alignCenter">Paid</td>
+                                                                            <!--<td class="alignCenter"># Of Chicken</td>-->
+                                                                            <!--<td class="alignCenter">Paid</td>-->
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -119,8 +120,8 @@
                                                                                 <td>${item1.vendor.vendorName}</td>
                                                                                 <td>${item1.invoiceNo}</td>
                                                                                 <td>${item1.amount}</td>
-                                                                                <td>${item1.chickenNo}</td>
-                                                                                <td>${item1.paidAmount}</td>
+                                                                                <!--<td>${item1.chickenNo}</td>-->
+                                                                                <!--<td>${item1.paidAmount}</td>-->
                                                                             </tr>
                                                                         </c:forEach>
                                                                     </tbody>

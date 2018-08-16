@@ -25,8 +25,8 @@ public class FCWRowMapper implements RowMapper<FCW> {
 //        data.setTotalAmount(rs.getDouble("TOTAL_AMOUNT"));
 //        data.setFcwId(rs.getInt("FCW_ID"));
         data.setInvoice(rs.getString("INVOICE"));
-        data.setOfChickenPur(rs.getInt("OF_CHICKEN_PUR"));
-        data.setPaidOutAmount(rs.getDouble("PAID_OUT_AMOUNT"));
+//        data.setOfChickenPur(rs.getInt("OF_CHICKEN_PUR"));
+//        data.setPaidOutAmount(rs.getDouble("PAID_OUT_AMOUNT"));
 
 
         Store store = new Store();

@@ -39,7 +39,8 @@ public class ManangerController {
     @RequestMapping(value = "/manager/addManager.htm", method = RequestMethod.GET)
     public String showAddManagerForm(ModelMap model) {
         Manager manager = new Manager();
-        List<Store> storeList = this.storeService.getStoreList();
+//        List<Store> storeList = this.storeService.getStoreList();
+        List<Store> storeList = this.storeService.getAvailableStoreListForManagerMapping();
         model.addAttribute("storeList", storeList);
         model.addAttribute("manager", manager);
         return "/manager/addManager";

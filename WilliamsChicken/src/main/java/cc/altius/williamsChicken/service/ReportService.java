@@ -5,11 +5,11 @@
 package cc.altius.williamsChicken.service;
 
 import cc.altius.williamsChicken.model.DTO.AccessLogReportDTO;
+import cc.altius.williamsChicken.model.DTO.BankRegisterDTO;
 import cc.altius.williamsChicken.model.DTO.FCWReportDTO;
 import cc.altius.williamsChicken.model.DTO.PayrollReportDTO;
 import cc.altius.williamsChicken.model.DTO.SalesReportDTO;
 import cc.altius.williamsChicken.model.FCW;
-import cc.altius.williamsChicken.model.Payroll;
 import java.util.List;
 
 /**
@@ -25,7 +25,8 @@ public interface ReportService {
     public List<PayrollReportDTO> getPayrollReport(String startDate, String endDate);
 
     public List<FCW> getFCWList(String startDate, String endDate);
-    
+
     public List<SalesReportDTO> getSalesReport(String startDate, String endDate);
 
+    public List<BankRegisterDTO> getBankRegisterReport(String startDate, String endDate);
 }

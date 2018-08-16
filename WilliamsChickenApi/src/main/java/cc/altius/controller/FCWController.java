@@ -7,7 +7,7 @@ package cc.altius.controller;
 import cc.altius.model.FCW;
 import cc.altius.model.Payroll;
 import cc.altius.model.ResponseFormat;
-import cc.altius.model.ValidToken;
+import cc.altius.model.ValidTokenAndExpDate;
 import cc.altius.service.ApiService;
 import cc.altius.service.FCWService;
 import cc.altius.utils.ErrorConstants;
@@ -21,6 +21,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -46,13 +47,13 @@ public class FCWController {
 
     @PostMapping(value = "/addFCW", produces = "application/json;charset=UTF-8")
     @ApiOperation(value = "Add a fcw method",
-    notes = "Add a fcw method",
-    response = Payroll.class)
+            notes = "Add a fcw method",
+            response = Payroll.class)
     @ApiResponses(value = {
         @ApiResponse(code = 200, response = Boolean.class, message = "OK"),
         @ApiResponse(code = 401, response = ResponseFormat.class, message = "INVALID TOKEN"),
         @ApiResponse(code = 500, response = ResponseFormat.class, message = "Exception Occured"),})
-    public ResponseEntity addPaymentMethod(
+    public ResponseEntity addFCW(
             @ApiParam(name = "token", value = "Token for authentication", required = true)
             @RequestHeader(value = "token") String token,
             @ApiParam(name = "apptoken", value = "APP Token for authentication", required = true)
@@ -66,8 +67,8 @@ public class FCWController {
             try {
                 LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog(" token :" + token));
                 LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog(" token :" + token));
-                ValidToken validToken = this.apiService.validateToken(token, userId);
-                if (validToken.isIsValid()) {
+                ValidTokenAndExpDate validTokenAndExpDate = this.apiService.validateToken(token, userId);
+                if (validTokenAndExpDate.isIsValid()) {
                     LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Valid Request"));
                     LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Valid Request"));
                     Gson gson = new Gson();
@@ -104,7 +105,7 @@ public class FCWController {
             }
         } else {
             responseFormat.setStatus("Failed");
-            responseFormat.setFailedReason("Invalid token");
+            responseFormat.setFailedReason("You are using older version of APP");
             responseFormat.setFailedValue(ErrorConstants.INVALID_VERSION_TOKEN);
             return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
 
@@ -113,8 +114,8 @@ public class FCWController {
 
     @PostMapping(value = "/getFCWReport", produces = "application/json;charset=UTF-8")
     @ApiOperation(value = "Get FCW Report",
-    notes = "Get FCW Report",
-    response = Payroll.class)
+            notes = "Get FCW Report",
+            response = Payroll.class)
     @ApiResponses(value = {
         @ApiResponse(code = 200, response = Boolean.class, message = "OK"),
         @ApiResponse(code = 401, response = ResponseFormat.class, message = "INVALID TOKEN"),
@@ -132,28 +133,28 @@ public class FCWController {
         try {
             LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog(" token :" + token));
             LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog(" token :" + token));
-            ValidToken validToken = this.apiService.validateToken(token, userId);
-//            if (validToken.isIsValid()) {
-            LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Valid Request"));
-            LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Valid Request"));
+            ValidTokenAndExpDate validToken = this.apiService.validateToken(token, userId);
+            if (validToken.isIsValid()) {
+                LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Valid Request"));
+                LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Valid Request"));
 
-            List<FCW> fcwList = this.fcwService.getFCWReportByDate(startDate, endDate);
-            if (fcwList.isEmpty()) {
-                responseFormat.setStatus("failed");
-                responseFormat.setFailedReason("EmptyResultSetException");
-                responseFormat.setFailedValue(ErrorConstants.EMPTY_LIST);
-                return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
+                List<FCW> fcwList = this.fcwService.getFCWReportByDate(startDate, endDate);
+                if (fcwList.isEmpty()) {
+                    responseFormat.setStatus("failed");
+                    responseFormat.setFailedReason("EmptyResultSetException");
+                    responseFormat.setFailedValue(ErrorConstants.EMPTY_LIST);
+                    return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
+                } else {
+                    LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("fcw list :" + fcwList));
+                    LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("fcw list :" + fcwList));
+                    return new ResponseEntity(fcwList, HttpStatus.OK);
+                }
             } else {
-                LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("fcw list :" + fcwList));
-                LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("fcw list :" + fcwList));
-                return new ResponseEntity(fcwList, HttpStatus.OK);
+                responseFormat.setStatus("failed");
+                responseFormat.setFailedReason("INVALID_TOKEN");
+                responseFormat.setFailedValue(ErrorConstants.INVALID_TOKEN);
+                return new ResponseEntity(responseFormat, HttpStatus.UNAUTHORIZED);
             }
-//            } else {
-//                responseFormat.setStatus("failed");
-//                responseFormat.setFailedReason("INVALID_TOKEN");
-//                responseFormat.setFailedValue(ErrorConstants.INVALID_TOKEN);
-//                return new ResponseEntity(responseFormat, HttpStatus.UNAUTHORIZED);
-//            }
         } catch (Exception e) {
             e.printStackTrace();
             LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
@@ -161,6 +162,66 @@ public class FCWController {
             responseFormat.setStatus("failed");
             responseFormat.setFailedReason("Exception Occured :" + e.getClass().getSimpleName());
             return new ResponseEntity(responseFormat, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }    
+        @PostMapping(value = "/checkFCWRecordExit", produces = "application/json;charset=UTF-8")
+    @ApiOperation(value = "Check FCW Record Exit",
+            notes = "Check FCW record exit for given date and store ID.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, response = Boolean.class, message = "OK"),
+        @ApiResponse(code = 401, response = ResponseFormat.class, message = "INVALID TOKEN"),
+        @ApiResponse(code = 500, response = ResponseFormat.class, message = "Exception Occured"),})
+    public ResponseEntity checkFCWRecordExit(
+            @ApiParam(name = "token", value = "Token for authentication", required = true)
+            @RequestHeader(value = "token") String token,
+            @ApiParam(name = "storeId", value = "App for Store Id", required = true)
+            @RequestHeader(value = "storeId") int storeId,
+            @ApiParam(name = "apptoken", value = "APP Token for authentication", required = true)
+            @RequestHeader(value = "apptoken") String appToken,
+            @ApiParam(name = "startDate", value = "Start Date for report", required = true)
+            @RequestHeader(value = "startDate") String startDate,
+            @ApiParam(name = "userId", value = "Users Id", required = true)
+            @RequestHeader(value = "userId") int userId) {
+        ResponseFormat responseFormat = new ResponseFormat();
+        if (appToken.equals(williamsChickenApiToken)) {
+            try {
+                LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog(" token :" + token));
+                LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog(" token :" + token));
+                ValidTokenAndExpDate validTokenAndExpDate = this.apiService.validateToken(token, userId);
+                boolean isExitRecord = this.fcwService.isFCWRecordExit(startDate, storeId);
+                if (validTokenAndExpDate.isIsValid()) {
+                    LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Valid Request"));
+                    LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Valid Request"));
+                    if (isExitRecord) {
+                        responseFormat.setStatus("failed");
+                        responseFormat.setFailedReason("Already Exist");
+                        responseFormat.setFailedValue(ErrorConstants.ALREADY_EXIT_RECORD);
+                        return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
+                    } else {
+                        responseFormat.setStatus("success");
+                        return new ResponseEntity(responseFormat,HttpStatus.OK);
+                    }
+
+                } else {
+                    responseFormat.setStatus("failed");
+                    responseFormat.setFailedReason("INVALID_TOKEN");
+                    responseFormat.setFailedValue(ErrorConstants.INVALID_TOKEN);
+                    return new ResponseEntity(responseFormat, HttpStatus.UNAUTHORIZED);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
+                LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
+                responseFormat.setStatus("failed");
+                responseFormat.setFailedReason("Exception Occured :" + e.getClass().getSimpleName());
+                return new ResponseEntity(responseFormat, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            responseFormat.setStatus("Failed");
+            responseFormat.setFailedReason("You are using older version of APP");
+            responseFormat.setFailedValue(ErrorConstants.INVALID_VERSION_TOKEN);
+            return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
+
         }
     }
 }

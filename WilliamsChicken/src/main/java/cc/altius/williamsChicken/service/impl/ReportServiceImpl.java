@@ -6,6 +6,7 @@ package cc.altius.williamsChicken.service.impl;
 
 import cc.altius.williamsChicken.dao.ReportDao;
 import cc.altius.williamsChicken.model.DTO.AccessLogReportDTO;
+import cc.altius.williamsChicken.model.DTO.BankRegisterDTO;
 import cc.altius.williamsChicken.model.DTO.FCWReportDTO;
 import cc.altius.williamsChicken.model.DTO.PayrollReportDTO;
 import cc.altius.williamsChicken.model.DTO.SalesReportDTO;
@@ -50,4 +51,10 @@ public class ReportServiceImpl implements ReportService {
     public List<SalesReportDTO> getSalesReport(String startDate, String endDate) {
         return this.reportDao.getSalesReport(startDate, endDate);
     }
+
+    @Override
+    public List<BankRegisterDTO> getBankRegisterReport(String startDate, String endDate) {
+        return this.reportDao.getBankRegisterReport(startDate, endDate);
+    }
+
 }

@@ -59,9 +59,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
         try {
             params.put("FIRST_NAME", employee.getFirstName());
             params.put("LAST_NAME", employee.getLastName());
-            params.put("EMIAIL_ID", employee.getEmailId());
+            params.put("EMAIL_ID", employee.getEmailId());
             params.put("PHONE_NO", employee.getPhoneNo());
+            params.put("PAY_RATE", employee.getPayRate());
             params.put("STORE_ID", employee.getStoreId());
+            params.put("ACTIVE", true);
             params.put("CREATED_BY", curUser);
             params.put("CREATED_DATE", curDate);
             params.put("LAST_MODIFIED_BY", curUser);

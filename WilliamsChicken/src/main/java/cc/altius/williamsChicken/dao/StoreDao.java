@@ -15,6 +15,8 @@ public interface StoreDao {
 
     public List<Store> getStoreList();
 
+    public List<Store> getAvailableStoreListForManagerMapping();
+
     public int addStore(Store store);
 
     public Store getStoreByStoreId(int storeId);

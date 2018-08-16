@@ -9,6 +9,8 @@ import cc.altius.williamsChicken.dao.StoreDao;
 import cc.altius.williamsChicken.model.CustomUserDetails;
 import cc.altius.williamsChicken.model.Store;
 import cc.altius.williamsChicken.model.rowMapper.StoreRowMapper;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -46,6 +49,23 @@ public class StoreDaoImpl implements StoreDao {
                 + " LEFT JOIN `user` u ON s.`CREATED_BY`=u.`USER_ID`"
                 + " LEFT JOIN state st ON s.`STATE_ID`=st.`STATE_ID`";
         return this.jdbcTemplate.query(sql, new StoreRowMapper());
+    }
+
+    @Override
+    public List<Store> getAvailableStoreListForManagerMapping() {
+        String sql = "SELECT s.`STORE_ID`,s.`STORE_NAME` FROM store s\n"
+                + "LEFT JOIN store_manager_mapping m ON m.`STORE_ID`=s.`STORE_ID`\n"
+                + "WHERE m.`STORE_ID` IS NULL AND m.`MANAGER_ID` IS NULL AND s.`ACTIVE`;";
+        return this.jdbcTemplate.query(sql, new RowMapper<Store>() {
+
+            @Override
+            public Store mapRow(ResultSet rs, int i) throws SQLException {
+                Store data = new Store();
+                data.setStoreId(rs.getInt("STORE_ID"));
+                data.setStoreName(rs.getString("STORE_NAME"));
+                return data;
+            }
+        });
     }
 
     @Override

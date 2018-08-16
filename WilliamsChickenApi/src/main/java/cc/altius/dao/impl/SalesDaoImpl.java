@@ -8,14 +8,13 @@ import cc.altius.dao.SalesDao;
 import cc.altius.model.DTO.Mapper.SalesReportDTOMapper;
 import cc.altius.model.DTO.SalesReportDTO;
 import cc.altius.model.Sales;
-import cc.altius.model.mapper.SalesRowMapper;
 import cc.altius.utils.DateUtils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -91,7 +90,7 @@ public class SalesDaoImpl implements SalesDao {
     }
 
     @Override
-    public SalesReportDTO getSalesListReportByDate(String startDate) {
+    public SalesReportDTO getSalesListReportByDate(String startDate, int storeId) {
         String sql = "SELECT SUM(s.`TOTAL_SALES`) - SUM(s.`NON_TAX_SALES`) AS salesLastWeek FROM sales s"
                 + " WHERE s.`SUBMIT_DATE`= ?";
         return this.jdbcTemplate.queryForObject(sql, new SalesReportDTOMapper(), startDate);
@@ -103,5 +102,68 @@ public class SalesDaoImpl implements SalesDao {
                 + " WHERE s.`SUBMIT_DATE` = ? AND s.`STORE_ID`= ?";
         return this.jdbcTemplate.queryForObject(sql, boolean.class, submitDate, storeId);
 
+    }
+
+    @Override
+    public int getNetSalesLastWeekReportByDate(String submitDate, int storeId) {
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar cal = Calendar.getInstance();
+            try {
+                cal.setTime(dateFormat.parse(submitDate));
+            } catch (ParseException ex) {
+                Logger.getLogger(SalesDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            cal.add(Calendar.DATE, -7);
+            Date todate1 = cal.getTime();
+            String netSalesLastWeek = dateFormat.format(todate1);
+
+            String sql = "SELECT s.`NET_SALES` FROM sales s WHERE s.`STORE_ID` =? AND s.`SUBMIT_DATE`=?;";
+            return this.jdbcTemplate.queryForObject(sql, Integer.class, storeId, netSalesLastWeek);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    @Override
+    public int getNetSalesLastYearReportByDate(String submitDate, int storeId) {
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar cal = Calendar.getInstance();
+            try {
+                cal.setTime(dateFormat.parse(submitDate));
+            } catch (ParseException ex) {
+                Logger.getLogger(SalesDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            cal.add(Calendar.YEAR, -1);
+            String netSalesLastYears = dateFormat.format(cal.getTime());
+
+            String sql = "SELECT s.`NET_SALES` FROM sales s WHERE s.`STORE_ID` =? AND s.`SUBMIT_DATE`=?;";
+            return this.jdbcTemplate.queryForObject(sql, Integer.class, storeId, netSalesLastYears);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    @Override
+    public int getSalesLastBegningHeadCountByDate(String submitDate, int storeId) {
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar cal = Calendar.getInstance();
+            try {
+                cal.setTime(dateFormat.parse(submitDate));
+            } catch (ParseException ex) {
+                Logger.getLogger(SalesDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            cal.add(Calendar.DATE, -1);
+            Date todate1 = cal.getTime();
+            String begningHeadCount = dateFormat.format(todate1);
+
+            String sql = "SELECT s.`ENDING_INVENTORY` FROM sales s"
+                    + " WHERE s.`STORE_ID`=? AND s.`SUBMIT_DATE`=?";
+            return this.jdbcTemplate.queryForObject(sql, Integer.class, storeId, begningHeadCount);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 }

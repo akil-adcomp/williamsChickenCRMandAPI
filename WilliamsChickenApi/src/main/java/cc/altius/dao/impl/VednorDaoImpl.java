@@ -34,7 +34,7 @@ public class VednorDaoImpl implements VendorDao {
 
     @Override
     public List<Vendor> getVendorList() {
-        String sql = "SELECT v.`VENDOR_ID`,v.`VENDOR_NAME`FROM vendor v WHERE v.`ACTIVE`=1";
+        String sql = "SELECT v.`VENDOR_ID`,v.`VENDOR_NAME`FROM vendor v WHERE v.`ACTIVE`=1 ORDER BY v.`VENDOR_NAME`";
         return this.jdbcTemplate.query(sql, new VendorRowMapper());
     }
 }

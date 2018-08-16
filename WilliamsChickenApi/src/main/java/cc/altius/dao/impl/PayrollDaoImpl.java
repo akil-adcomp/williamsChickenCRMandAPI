@@ -12,17 +12,15 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -47,17 +45,20 @@ public class PayrollDaoImpl implements PayrollDao {
     public int addPayroll(List<Payroll> payroll, int userId) {
         int payrollId = 0;
         String curDate = DateUtils.getCurrentDateString(DateUtils.IST, DateUtils.YMDHMS);
-        String sql = "INSERT INTO payroll VALUE(NULL,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO payroll VALUE(NULL,?,?,?,?,?,NULL,?,?,?,?,?,?)";
         List<Object[]> batchParams = new ArrayList<>();
         for (Payroll data : payroll) {
-            Date cdate = null;
-            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+//            Date cdate = null;
+            Date startDate = null, stopDate = null;
+            DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
             try {
-                cdate = (Date) dateFormat.parse(data.getSubmitDate());
+//                cdate = (Date) dateFormat.parse(data.getSubmitDate());
+                startDate = (Date) dateFormat.parse(data.getDateRange().getStartDate());
+                stopDate = (Date) dateFormat.parse(data.getDateRange().getStopDate());
             } catch (ParseException ex) {
                 Logger.getLogger(PayrollDaoImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
-            Object[] tmp = {data.getStore().getStoreId(), data.getEmployee().getEmployeeId(), data.getRegHour(), data.getOt(), data.getPayRate(), cdate, curDate, userId, curDate, userId};
+            Object[] tmp = {data.getStore().getStoreId(), data.getEmployee().getEmployeeId(), data.getRegHour(), 0,data.getPayRate(), curDate, userId, curDate, userId, startDate, stopDate};
             batchParams.add(tmp);
         }
 
@@ -81,4 +82,14 @@ public class PayrollDaoImpl implements PayrollDao {
                 + " WHERE p.`CREATED_DATE` BETWEEN ? AND ?";
         return this.jdbcTemplate.query(sql, new PayrollRowMapper(), startDate, stopDate);
     }
+
+    @Override
+    public int isPayrollRecordExit(String startDate,String stopDate, int storeId) {
+        String sql = " SELECT COUNT(b.`START_DATE`) AS rem FROM payroll b WHERE DATE(b.`START_DATE`) = ? AND DATE(b.`STOP_DATE`) = ? AND b.`STORE_ID`=?;";
+        System.out.println("sql query///"+sql);
+        int count=this.jdbcTemplate.queryForObject(sql, Integer.class, startDate , stopDate, storeId);
+        System.out.println("count payroll===>"+count);
+        return count;
+    }
+
 }

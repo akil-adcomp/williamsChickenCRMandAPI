@@ -13,7 +13,9 @@ import java.util.List;
  */
 public interface PayrollService {
 
-    public int addPayroll(List<Payroll> payroll,int userId);
+    public int addPayroll(List<Payroll> payroll, int userId);
 
     public List<Payroll> getPayrollReportByDate(String startDate, String endDate);
+
+    public int isPayrollRecordExit(String startDate,String stopDate, int storeId);
 }

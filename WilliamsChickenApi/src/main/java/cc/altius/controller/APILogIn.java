@@ -4,12 +4,11 @@
  */
 package cc.altius.controller;
 
-import cc.altius.framework.GlobalConstants;
 import cc.altius.model.DTO.LoginUserDetails;
 import cc.altius.model.ResponseFormat;
 import cc.altius.model.Token;
 import cc.altius.model.TokenUserId;
-import cc.altius.model.ValidToken;
+import cc.altius.model.ValidTokenAndExpDate;
 import cc.altius.service.ApiService;
 import cc.altius.utils.ErrorConstants;
 import cc.altius.utils.LogUtils;
@@ -17,7 +16,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -86,7 +84,7 @@ public class APILogIn {
         } else {
             //             token validation failed
             responseFormat.setStatus("Failed");
-            responseFormat.setFailedReason("Invalid token");
+            responseFormat.setFailedReason("You are using older version of APP");
             responseFormat.setFailedValue(ErrorConstants.INVALID_VERSION_TOKEN);
             return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
 
@@ -141,45 +139,57 @@ public class APILogIn {
         @ApiResponse(code = 404, response = ResponseFormat.class, message = "OTP SENDING_FAILED"),
         @ApiResponse(code = 500, response = ResponseFormat.class, message = "Exception Occured")})
     public ResponseEntity updatePassword(
+            @ApiParam(name = "token", value = "Token for authentication", required = true)
             @RequestHeader(value = "token") String token,
-            @RequestHeader(value = "emailId") String emailId,
+            @ApiParam(name = "apptoken", value = "APP Token for authentication", required = true)
+            @RequestHeader(value = "apptoken") String appToken,
             @ApiParam(name = "userId", value = "Users Id", required = true)
             @RequestHeader(value = "userId") int userId,
             @RequestHeader(value = "oldPassword") String oldPassword,
             @RequestHeader(value = "newPassword") String newPassword) {
-        LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("emailId " + emailId + "/oldPassword :" + oldPassword + "/newPassword:" + newPassword));
+        LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("userId " + userId + "/oldPassword :" + oldPassword + "/newPassword:" + newPassword)+"/apptoken:"+token);
         String status = "";
         ResponseFormat responseFormat = new ResponseFormat();
         Map<String, Object> responseMap = null;
-        try {
-            LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog(" token :" + token));
-            LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog(" token :" + token));
-            ValidToken validToken = this.apiService.validateToken(token, userId);
-            if (validToken.isIsValid()) {
-                responseMap = this.apiService.updatePassword(emailId, oldPassword, newPassword);
-                status = (String) responseMap.get("status");
-                if (status.equals("Success")) {
-                    return new ResponseEntity(status, HttpStatus.OK);
+        if (appToken.equals(williamsChickenApiToken)) {
+            try {
+                LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog(" token :" + token));
+                LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog(" token :" + token));
+                ValidTokenAndExpDate validTokenAndExpDate = this.apiService.validateToken(token, userId);
+                if (validTokenAndExpDate.isIsValid()) {
+                    responseMap = this.apiService.updatePassword(userId, oldPassword, newPassword);
+                    status = (String) responseMap.get("status");
+                    if (status.equals("Success")) {
+                        responseFormat.setStatus(status);
+                        return new ResponseEntity(responseFormat, HttpStatus.OK);
+                    } else {
+                        responseFormat.setStatus("failed");
+                        responseFormat.setFailedReason(responseMap.get("failedReason") + "");
+                        responseFormat.setFailedValue((Integer) responseMap.get("failedValue"));
+                        return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
+                    }
                 } else {
                     responseFormat.setStatus("failed");
-                    responseFormat.setFailedReason(responseMap.get("failedReason") + "");
-                    responseFormat.setFailedValue((Integer) responseMap.get("failedValue"));
-                    return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
+                    responseFormat.setFailedReason("INVALID_TOKEN");
+                    responseFormat.setFailedValue(ErrorConstants.INVALID_TOKEN);
+                    return new ResponseEntity(responseFormat, HttpStatus.UNAUTHORIZED);
                 }
-            } else {
+            } catch (Exception e) {
+                e.printStackTrace();
+                LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
+                LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
                 responseFormat.setStatus("failed");
-                responseFormat.setFailedReason("INVALID_TOKEN");
-                responseFormat.setFailedValue(ErrorConstants.INVALID_TOKEN);
-                return new ResponseEntity(responseFormat, HttpStatus.UNAUTHORIZED);
+                responseFormat.setFailedReason("Exception Occured :" + e.getClass());
+                responseFormat.setFailedValue(ErrorConstants.EXCEPTION_OCCURED);
+                return new ResponseEntity(responseFormat, HttpStatus.INTERNAL_SERVER_ERROR);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
-            LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Error occured Because : \n " + e));
-            responseFormat.setStatus("failed");
-            responseFormat.setFailedReason("Exception Occured :" + e.getClass());
-            responseFormat.setFailedValue(ErrorConstants.EXCEPTION_OCCURED);
-            return new ResponseEntity(responseFormat, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            //             token validation failed
+            responseFormat.setStatus("Failed");
+            responseFormat.setFailedReason("You are using older version of APP");
+            responseFormat.setFailedValue(ErrorConstants.INVALID_VERSION_TOKEN);
+            return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
+
         }
     }
 
@@ -223,7 +233,7 @@ public class APILogIn {
             }
         } else {
             responseFormat.setStatus("Failed");
-            responseFormat.setFailedReason("Invalid token");
+            responseFormat.setFailedReason("You are using older version of APP");
             responseFormat.setFailedValue(ErrorConstants.INVALID_VERSION_TOKEN);
             return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
 
@@ -268,7 +278,7 @@ public class APILogIn {
             }
         } else {
             responseFormat.setStatus("Failed");
-            responseFormat.setFailedReason("Invalid token");
+            responseFormat.setFailedReason("You are using older version of APP");
             responseFormat.setFailedValue(ErrorConstants.INVALID_VERSION_TOKEN);
             return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
 

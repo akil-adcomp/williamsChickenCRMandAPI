@@ -37,7 +37,7 @@ public class FCWResultSetExtractor implements ResultSetExtractor<List<FCWReportD
         boolean isFirst = true;
         while (rs.next()) {
             newStoreId = rs.getInt("STORE_ID");
-            newCreated = sdf.format(rs.getDate("date"));
+            newCreated = sdf.format(rs.getDate("SUBMIT_DATE"));
             if (oldStoreId != newStoreId || !oldCreatedDate.equals(newCreated)) {
                 if (!isFirst) {
                     fcwReportList.add(fcw);
@@ -50,6 +50,7 @@ public class FCWResultSetExtractor implements ResultSetExtractor<List<FCWReportD
                 s.setStoreName(rs.getString("STORE_NAME"));
                 fcw.setStore(s);
                 fcw.setSubmitDate(rs.getTimestamp("SUBMIT_DATE"));
+                fcw.setTotalPaidAmount(rs.getDouble("PAID_OUTS"));
                 User u = new User();
                 u.setUserId(rs.getInt("CREATED_BY"));
                 u.setUsername(rs.getString("USERNAME"));
@@ -62,8 +63,8 @@ public class FCWResultSetExtractor implements ResultSetExtractor<List<FCWReportD
             v.setVendorName(rs.getString("VENDOR_NAME"));
             fcwStore.setVendor(v);
             fcwStore.setAmount(rs.getDouble("AMOUNT"));
-            fcwStore.setChickenNo(rs.getInt("OF_CHICKEN_PUR"));
-            fcwStore.setPaidAmount(rs.getDouble("PAID_OUT_AMOUNT"));
+//            fcwStore.setChickenNo(rs.getInt("OF_CHICKEN_PUR"));
+//            fcwStore.setPaidAmount(rs.getDouble("PAID_OUT_AMOUNT"));
             fcw.getStoreDetails().add(fcwStore);
             fcw.addChickenTotal(fcwStore.getChickenNo());
             fcw.addTotalAmount(fcwStore.getAmount());

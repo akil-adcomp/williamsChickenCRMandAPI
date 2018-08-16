@@ -17,6 +17,7 @@ public class Employee {
     private String lastName;
     private String emailId;
     private String phoneNo;
+    private double payRate;
     private Date createdDate;
     private int ceratedBy;
     private Date lastModifiedDate;
@@ -62,6 +63,14 @@ public class Employee {
 
     public void setPhoneNo(String phoneNo) {
         this.phoneNo = phoneNo;
+    }
+
+    public double getPayRate() {
+        return payRate;
+    }
+
+    public void setPayRate(double payRate) {
+        this.payRate = payRate;
     }
 
     public Date getCreatedDate() {
@@ -114,8 +123,7 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "Employee{" + "employeeId=" + employeeId + ", firstName=" + firstName + ", lastName=" + lastName + ", emailId=" + emailId + ", phoneNo=" + phoneNo + ", createdDate=" + createdDate + ", ceratedBy=" + ceratedBy + ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy + ", user=" + user + ", active=" + active + '}';
+        return "Employee{" + "employeeId=" + employeeId + ", firstName=" + firstName + ", lastName=" + lastName + ", emailId=" + emailId + ", phoneNo=" + phoneNo + ", payRate=" + payRate + ", createdDate=" + createdDate + ", ceratedBy=" + ceratedBy + ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy + ", user=" + user + ", active=" + active + '}';
     }
 
-    
 }

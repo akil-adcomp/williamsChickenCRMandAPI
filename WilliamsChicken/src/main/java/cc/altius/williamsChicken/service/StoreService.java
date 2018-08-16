@@ -16,11 +16,13 @@ public interface StoreService {
 
     public List<Store> getStoreList();
 
+    public List<Store> getAvailableStoreListForManagerMapping();
+
     public int addStore(Store store);
 
     public Store getStoreByStoreId(int storeId);
 
     public int updateStore(Store store);
 
-     public Map updateStoreActiveStatus(String managerIds, int publishValue);
+    public Map updateStoreActiveStatus(String managerIds, int publishValue);
 }

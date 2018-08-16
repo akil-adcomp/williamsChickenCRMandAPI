@@ -15,7 +15,7 @@ public class Payroll {
     private int payrollId;
     private Store store;
     private Employee employee;
-    private int regHour;
+    private double regHour;
     private int ot;
     private double payRate;
     private String submitDate;
@@ -24,6 +24,7 @@ public class Payroll {
     private Date lastModifiedDate;
     private int lastModifiedBy;
     private User user;
+    private DateRange dateRange;
 
     public int getPayrollId() {
         return payrollId;
@@ -49,13 +50,15 @@ public class Payroll {
         this.employee = employee;
     }
 
-    public int getRegHour() {
+    public double getRegHour() {
         return regHour;
     }
 
-    public void setRegHour(int regHour) {
+    public void setRegHour(double regHour) {
         this.regHour = regHour;
     }
+
+  
 
     public int getOt() {
         return ot;
@@ -121,8 +124,16 @@ public class Payroll {
         this.user = user;
     }
 
+    public DateRange getDateRange() {
+        return dateRange;
+    }
+
+    public void setDateRange(DateRange dateRange) {
+        this.dateRange = dateRange;
+    }
+
     @Override
     public String toString() {
-        return "Payroll{" + "payrollId=" + payrollId + ", store=" + store + ", employee=" + employee + ", regHour=" + regHour + ", ot=" + ot + ", payRate=" + payRate + ", submitDate=" + submitDate + ", createdDate=" + createdDate + ", createdBy=" + createdBy + ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy + ", user=" + user + '}';
+        return "Payroll{" + "payrollId=" + payrollId + ", store=" + store + ", employee=" + employee + ", regHour=" + regHour + ", ot=" + ot + ", payRate=" + payRate + ", submitDate=" + submitDate + ", createdDate=" + createdDate + ", createdBy=" + createdBy + ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy + ", user=" + user + ", dateRange=" + dateRange + '}';
     }
 }

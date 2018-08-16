@@ -64,7 +64,7 @@
                                         <div class="form-group">
                                             <label class="req col-md-2 col-xs-12 control-label">Vendor State</label>
                                             <div class="col-md-6 col-xs-12">
-                                                <form:select path="stateId" id="stateId" cssClass="form-control select">
+                                                <form:select path="stateId" id="stateId" data-live-search="true" cssClass="form-control select">
                                                     <form:option value="0" label="Nothing selected"/>
                                                     <form:options items="${stateList}" itemLabel="stateName" itemValue="stateId"/>
                                                 </form:select>

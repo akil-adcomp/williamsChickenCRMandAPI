@@ -6,7 +6,7 @@ package cc.altius.service.impl;
 
 import cc.altius.dao.ApiDao;
 import cc.altius.framework.GlobalConstants;
-import cc.altius.model.ValidToken;
+import cc.altius.model.ValidTokenAndExpDate;
 import cc.altius.service.ApiService;
 import cc.altius.utils.ErrorConstants;
 import cc.altius.utils.LogUtils;
@@ -57,11 +57,11 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public Map<String, Object> updatePassword(String emailId, String oldPassword, String newPassword) {
+    public Map<String, Object> updatePassword(int userId, String oldPassword, String newPassword) {
         Map<String, Object> responseMap = new HashMap<>();
-        responseMap = this.apiDao.checkCustomerToken(emailId, oldPassword);
+        responseMap = this.apiDao.checkCustomerToken(userId, oldPassword);
         if ((Boolean) responseMap.get("isCustomerValid")) {
-            int i = this.apiDao.updatePassword(emailId, newPassword);
+            int i = this.apiDao.updatePassword(userId, newPassword);
             if (i > 0) {
                 responseMap.put("status", "Success");
             } else {
@@ -77,7 +77,7 @@ public class ApiServiceImpl implements ApiService {
      * Returns true if the Token is valid and false if it is not valid
      */
     @Override
-    public ValidToken validateToken(String token, int userId) {
+    public ValidTokenAndExpDate validateToken(String token, int userId) {
         return this.apiDao.validateToken(token, userId);
     }
 

@@ -5,6 +5,7 @@
 package cc.altius.williamsChicken.dao;
 
 import cc.altius.williamsChicken.model.DTO.AccessLogReportDTO;
+import cc.altius.williamsChicken.model.DTO.BankRegisterDTO;
 import cc.altius.williamsChicken.model.DTO.FCWReportDTO;
 import cc.altius.williamsChicken.model.DTO.PayrollReportDTO;
 import cc.altius.williamsChicken.model.DTO.SalesReportDTO;
@@ -27,4 +28,6 @@ public interface ReportDao {
     public List<FCW> getFCWList(String startDate, String endDate);
 
     public List<SalesReportDTO> getSalesReport(String startDate, String endDate);
+
+    public List<BankRegisterDTO> getBankRegisterReport(String startDate, String endDate);
 }

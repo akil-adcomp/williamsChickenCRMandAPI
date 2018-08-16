@@ -4,7 +4,7 @@
  */
 package cc.altius.dao;
 
-import cc.altius.model.ValidToken;
+import cc.altius.model.ValidTokenAndExpDate;
 import java.util.Map;
 
 /**
@@ -13,19 +13,19 @@ import java.util.Map;
  */
 public interface ApiDao {
 
-    public Map<String, Object> checkCustomerToken(String emailId, String password);
+    public Map<String, Object> checkCustomerToken(int userId, String password);
 
     public Map<String, Object> signIn(String emailId, String password);
 
     public Map<String, Object> forgotPassword(String emailIdo);
 
-    public int updatePassword(String emailId, String newPassword);
+    public int updatePassword(int userId, String newPassword);
 
     public Map<String, Object> getTokenByUserId(int userId);
 
     public Map<String, Object> updateUserAuthorization(int userId, int authorizeFlag);
 
-    public ValidToken validateToken(String token, int userId);
+    public ValidTokenAndExpDate validateToken(String token, int userId);
 
     public String updateToken(String oldToken, int userId);
 }

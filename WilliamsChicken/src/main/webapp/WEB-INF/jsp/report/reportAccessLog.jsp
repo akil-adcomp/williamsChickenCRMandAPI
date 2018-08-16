@@ -1,7 +1,7 @@
 <%-- 
     Document   : reportAccessLog
-    Created on : 1 Oct, 2016, 3:51:05 PM
-    Author     : shrutika
+    Created on : 1 Jan, 2018, 3:51:05 PM
+    Author     : manish
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -27,8 +27,8 @@
 
                 <!-- START BREADCRUMB -->
                 <ul class="breadcrumb">
-                    <li><a href="../home/home">Home</a></li>
-                    <li><a href="../home/home">Reports</a></li>
+                    <li><a href="../home/home.htm">Home</a></li>
+                    <li><a href="../home/home.htm">Reports</a></li>
                     <li><a href="#">Access Log</a></li>
                 </ul>
                 <!-- END BREADCRUMB --> 

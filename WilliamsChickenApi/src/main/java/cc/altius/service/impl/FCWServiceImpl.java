@@ -22,15 +22,26 @@ public class FCWServiceImpl implements FCWService {
     private FCWDao fCWDao;
 
     @Override
-    public int addFCW(List<FCW> fcw,int userId) {
-        return this.fCWDao.addFCW(fcw,userId);
+    public int addFCW(List<FCW> fcw, int userId) {
+        return this.fCWDao.addFCW(fcw, userId);
     }
 
     @Override
     public List<FCW> getFCWReportByDate(String startDate, String endDate) {
-        
-        List<FCW> fcwList =this.fCWDao.getFCWReportByDate(startDate, endDate);
-       
+
+        List<FCW> fcwList = this.fCWDao.getFCWReportByDate(startDate, endDate);
+
         return fcwList;
     }
+
+    @Override
+    public double getTotalPaidOutsByDateAndStoreId(String submitDate, int storeId) {
+        return this.fCWDao.getTotalPaidOutsByDateAndStoreId(submitDate, storeId);
+    }
+
+    @Override
+    public boolean isFCWRecordExit(String submitDate, int storeId) {
+        return this.fCWDao.isFCWRecordExit(submitDate, storeId);
+    }
+
 }

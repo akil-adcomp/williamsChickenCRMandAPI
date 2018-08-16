@@ -76,9 +76,16 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
+                                            <label class="req col-md-2 col-xs-12 control-label">Pay Rate</label>
+                                            <div class="col-md-6 col-xs-12">
+                                                <form:input path="payRate" maxlength="10" cssClass="form-control"/>
+                                                <span class="help-block">Please Enter Pay Rate.</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <label class="req col-md-2 col-xs-12 control-label">Store</label>
                                             <div class="col-md-6 col-xs-12">
-                                                <form:select path="storeId" id="storeId" cssClass="form-control select">
+                                                <form:select path="storeId" id="storeId" data-live-search="true" cssClass="form-control select">
                                                     <form:option value="0" label="Nothing selected"/>
                                                     <form:options items="${storeList}" itemLabel="storeName" itemValue="storeId"/>
                                                 </form:select>

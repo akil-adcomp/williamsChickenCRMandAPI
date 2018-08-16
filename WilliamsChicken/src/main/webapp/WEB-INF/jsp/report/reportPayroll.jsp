@@ -15,6 +15,7 @@
         <!-- CSS INCLUDE -->
         <%@include file="../common/css.jsp"%>
         <!-- EOF CSS INCLUDE -->
+
     </head>
     <body>
         <!-- START PAGE CONTAINER -->
@@ -27,8 +28,8 @@
 
                 <!-- START BREADCRUMB -->
                 <ul class="breadcrumb">
-                    <li><a href="../home/home">Home</a></li>
-                    <li><a href="../home/home">Reports</a></li>
+                    <li><a href="../home/home.htm">Home</a></li>
+                    <li><a href="../home/home.htm">Reports</a></li>
                     <li><a href="#">Payroll Report</a></li>
                 </ul>
                 <!-- END BREADCRUMB --> 
@@ -58,15 +59,15 @@
                                                     <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label><spring:message code="startDt"/></label>
-                                                            <input name="startDate" id="startDate" value="${startDate}" class="form-control datepicker"/>
+                                                            <input name="startDate" value="${startDate}" id="startDate"  class="form-control customdatepicker"/>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-2">
-                                                        <div class="form-group">
-                                                            <label><spring:message code="stopDt"/></label>
-                                                            <input  name="stopDate"  id="stopDate" value="${stopDate}" class="form-control datepicker"/>
-                                                        </div>
-                                                    </div>
+                                                    <!--                                                    <div class="col-md-2">
+                                                                                                            <div class="form-group">
+                                                                                                                <label><spring:message code="stopDt"/></label>
+                                                                                                                <input  name="stopDate"  id="stopDate" value="${stopDate}" class="form-control datepicker"/>
+                                                                                                            </div>
+                                                                                                        </div>-->
                                                     <div class="col-md-2 btn-filter">
                                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />        
                                                         <button type="submit" class="btn-info btn-sm"><spring:message code="button.Go"/></button>
@@ -157,5 +158,12 @@
         <script type="text/javascript" src="../js/plugins.js"></script>        
         <script type="text/javascript" src="../js/actions.js"></script>
         <!-- END TEMPLATE -->
+        <script>
+            $(document).ready(function() {
+                $(".customdatepicker").datepicker({format: 'yyyy-mm-dd', autoclose: true,
+                    daysOfWeekDisabled: "0,2,3,4,5,6"
+                });
+            });
+        </script>
     </body>
 </html>

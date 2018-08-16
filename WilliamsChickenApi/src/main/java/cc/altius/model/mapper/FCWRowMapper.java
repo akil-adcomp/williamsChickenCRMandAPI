@@ -24,8 +24,9 @@ public class FCWRowMapper implements RowMapper<FCW> {
         data.setAmount(rs.getInt("AMOUNT"));
         data.setFcwId(rs.getInt("FCW_ID"));
         data.setInvoice(rs.getString("INVOICE"));
-        data.setOfChickenPur(rs.getInt("OF_CHICKEN_PUR"));
-        data.setPaidOutAmount(rs.getInt("PAID_OUT_AMOUNT"));
+//        data.setOfChickenPur(rs.getInt("OF_CHICKEN_PUR"));
+        data.setPaidOutAmount(rs.getInt("PAID_OUTS"));
+        data.setNoOfStoreTranscation(rs.getInt("NO_OF_STORE_TRANSACTION"));
 
         Store store = new Store();
         store.setStoreId(rs.getInt("STORE_ID"));
@@ -42,6 +43,7 @@ public class FCWRowMapper implements RowMapper<FCW> {
         data.setCreatedDate(rs.getDate("CREATED_DATE"));
         data.setLastModifiedBy(rs.getInt("LAST_MODIFIED_BY"));
         data.setLastModifiedDate(rs.getDate("LAST_MODIFIED_DATE"));
+        data.setDummyVendor(rs.getString("DUMMY_VENDOR"));
         return data;
     }
 }

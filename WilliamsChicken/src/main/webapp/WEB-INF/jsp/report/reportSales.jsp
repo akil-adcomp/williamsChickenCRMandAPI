@@ -27,8 +27,8 @@
 
                 <!-- START BREADCRUMB -->
                 <ul class="breadcrumb">
-                    <li><a href="../home/home">Home</a></li>
-                    <li><a href="../home/home">Reports</a></li>
+                    <li><a href="../home/home.htm">Home</a></li>
+                    <li><a href="../home/home.htm">Reports</a></li>
                     <li><a href="#">Sales Report</a></li>
                 </ul>
                 <!-- END BREADCRUMB --> 

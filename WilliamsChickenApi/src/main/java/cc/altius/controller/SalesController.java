@@ -8,9 +8,10 @@ import cc.altius.model.DTO.SalesReportDTO;
 import cc.altius.model.Payroll;
 import cc.altius.model.ResponseFormat;
 import cc.altius.model.Sales;
-import cc.altius.model.Store;
-import cc.altius.model.ValidToken;
+import cc.altius.model.ValidTokenAndExpDate;
 import cc.altius.service.ApiService;
+import cc.altius.service.BankRegistrationService;
+import cc.altius.service.FCWService;
 import cc.altius.service.SalesService;
 import cc.altius.utils.ErrorConstants;
 import cc.altius.utils.LogUtils;
@@ -19,8 +20,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import java.util.Date;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -41,13 +40,17 @@ public class SalesController {
     private SalesService salesService;
     @Autowired
     private ApiService apiService;
+    @Autowired
+    private BankRegistrationService bankRegistrationService;
+    @Autowired
+    private FCWService fCWService;
     private @Value("#{settings['williamsChickenApiToken']}")
     String williamsChickenApiToken;
 
     @PostMapping(value = "/addSales", produces = "application/json;charset=UTF-8")
     @ApiOperation(value = "Add a sales method",
-    notes = "Add a sales method",
-    response = Payroll.class)
+            notes = "Add a sales method",
+            response = Payroll.class)
     @ApiResponses(value = {
         @ApiResponse(code = 200, response = Boolean.class, message = "OK"),
         @ApiResponse(code = 401, response = ResponseFormat.class, message = "INVALID TOKEN"),
@@ -66,9 +69,9 @@ public class SalesController {
             try {
                 LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog(" token :" + token));
                 LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog(" token :" + token));
-                ValidToken validToken = this.apiService.validateToken(token, userId);
+                ValidTokenAndExpDate validTokenAndExpDate = this.apiService.validateToken(token, userId);
 
-                if (validToken.isIsValid()) {
+                if (validTokenAndExpDate.isIsValid()) {
                     LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Valid Request"));
                     LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Valid Request"));
 
@@ -106,7 +109,7 @@ public class SalesController {
             }
         } else {
             responseFormat.setStatus("Failed");
-            responseFormat.setFailedReason("Invalid token");
+            responseFormat.setFailedReason("You are using older version of APP");
             responseFormat.setFailedValue(ErrorConstants.INVALID_VERSION_TOKEN);
             return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
 
@@ -115,8 +118,8 @@ public class SalesController {
 
     @PostMapping(value = "/getSalesReport", produces = "application/json;charset=UTF-8")
     @ApiOperation(value = "Get Sales Report",
-    notes = "Get Sales Report",
-    response = Payroll.class)
+            notes = "Get Sales Report",
+            response = Payroll.class)
     @ApiResponses(value = {
         @ApiResponse(code = 200, response = Boolean.class, message = "OK"),
         @ApiResponse(code = 401, response = ResponseFormat.class, message = "INVALID TOKEN"),
@@ -137,20 +140,30 @@ public class SalesController {
             try {
                 LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog(" token :" + token));
                 LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog(" token :" + token));
-                ValidToken validToken = this.apiService.validateToken(token, userId);
+                ValidTokenAndExpDate validTokenAndExpDate = this.apiService.validateToken(token, userId);
                 boolean isExitRecord = this.salesService.isExitRecord(startDate, storeId);
-                if (validToken.isIsValid()) {
+                if (validTokenAndExpDate.isIsValid()) {
                     LogUtils.systemLogger.info(LogUtils.buildStringForSystemLog("Valid Request"));
                     LogUtils.debugLogger.debug(LogUtils.buildStringForSystemLog("Valid Request"));
                     if (isExitRecord) {
                         responseFormat.setStatus("failed");
                         responseFormat.setFailedReason("Already Exist");
                         responseFormat.setFailedValue(ErrorConstants.ALREADY_EXIT_RECORD);
-                        return new ResponseEntity(responseFormat, HttpStatus.UNAUTHORIZED);
+                        return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
                     } else {
-                        SalesReportDTO salesReportDTO = this.salesService.getSalesListReportByDate(startDate);
+                        // SalesReportDTO salesReportDTO = this.salesService.getSalesListReportByDate(startDate, storeId);
+                        int begningHeadCount = this.salesService.getSalesLastBegningHeadCountByDate(startDate, storeId);
+                        int netSalesLastWeek = this.salesService.getNetSalesLastWeekReportByDate(startDate, storeId);
+                        int netSalesLastYear = this.salesService.getNetSalesLastYearReportByDate(startDate, storeId);
+                        double totalDeposit = this.bankRegistrationService.getTotalDepositsByDateAndStoreId(startDate, storeId);
+                        double totalPaidOuts = this.fCWService.getTotalPaidOutsByDateAndStoreId(startDate, storeId);
+                        SalesReportDTO salesReportDTO = new SalesReportDTO();
+                        salesReportDTO.setBegningHeadCount(begningHeadCount);
+                        salesReportDTO.setNetSalesLastWeek(netSalesLastWeek);
+                        salesReportDTO.setNetSalesLastYear(netSalesLastYear);
+                        salesReportDTO.setTotalDeposit(totalDeposit);
+                        salesReportDTO.setTotalPaidOuts(totalPaidOuts);
                         return new ResponseEntity(salesReportDTO, HttpStatus.OK);
-
                     }
 
                 } else {
@@ -169,7 +182,7 @@ public class SalesController {
             }
         } else {
             responseFormat.setStatus("Failed");
-            responseFormat.setFailedReason("Invalid token");
+            responseFormat.setFailedReason("You are using older version of APP");
             responseFormat.setFailedValue(ErrorConstants.INVALID_VERSION_TOKEN);
             return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
 

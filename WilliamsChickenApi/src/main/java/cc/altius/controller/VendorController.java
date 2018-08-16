@@ -6,7 +6,7 @@ package cc.altius.controller;
 
 import cc.altius.model.Employee;
 import cc.altius.model.ResponseFormat;
-import cc.altius.model.ValidToken;
+import cc.altius.model.ValidTokenAndExpDate;
 import cc.altius.model.Vendor;
 import cc.altius.service.ApiService;
 import cc.altius.service.VendorService;
@@ -42,8 +42,8 @@ public class VendorController {
 
     @PostMapping(value = "/getVendorList", produces = "application/json;charset=UTF-8")
     @ApiOperation(value = "Get Vendor List",
-    notes = "Get Vendor List",
-    response = Employee.class)
+            notes = "Get Vendor List",
+            response = Employee.class)
     @ApiResponses(value = {
         @ApiResponse(code = 200, response = Boolean.class, message = "OK"),
         @ApiResponse(code = 401, response = ResponseFormat.class, message = "INVALID TOKEN"),
@@ -61,8 +61,8 @@ public class VendorController {
         Map<String, Object> responseMap = null;
         if (appToken.equals(williamsChickenApiToken)) {
             try {
-                ValidToken validToken = this.apiService.validateToken(token, userId);
-                if (validToken.isIsValid()) {
+                ValidTokenAndExpDate validTokenAndExpDate = this.apiService.validateToken(token, userId);
+                if (validTokenAndExpDate.isIsValid()) {
                     List<Vendor> vendorList = this.vendorService.getVendorList();
                     return new ResponseEntity(vendorList, HttpStatus.OK);
                 } else {
@@ -82,7 +82,7 @@ public class VendorController {
             }
         } else {
             responseFormat.setStatus("Failed");
-            responseFormat.setFailedReason("Invalid token");
+            responseFormat.setFailedReason("You are using older version of APP");
             responseFormat.setFailedValue(ErrorConstants.INVALID_VERSION_TOKEN);
             return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
 

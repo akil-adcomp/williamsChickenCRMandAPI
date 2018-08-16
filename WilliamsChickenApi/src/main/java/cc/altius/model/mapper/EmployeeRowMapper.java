@@ -22,6 +22,7 @@ public class EmployeeRowMapper implements RowMapper<Employee> {
         data.setEmployeeId(rs.getInt("EMPLOYEE_ID"));
         data.setFirstName(rs.getString("FIRST_NAME"));
         data.setLastName(rs.getString("LAST_NAME"));
+        data.setPayRate(rs.getDouble("PAY_RATE"));
 //        data.setEmailId(rs.getString("EMAIL_ID"));
 //        data.setPhoneNo(rs.getString("PHONE_NO"));
 //        data.setCreatedDate(rs.getDate("CREATED_DATE"));

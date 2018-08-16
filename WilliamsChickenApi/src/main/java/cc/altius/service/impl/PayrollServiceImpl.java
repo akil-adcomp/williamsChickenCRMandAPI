@@ -17,17 +17,23 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class PayrollServiceImpl implements PayrollService {
-    
+
     @Autowired
     private PayrollDao payrollDao;
-    
+
     @Override
     public int addPayroll(List<Payroll> payroll, int userId) {
         return this.payrollDao.addPayroll(payroll, userId);
     }
-    
+
     @Override
     public List<Payroll> getPayrollReportByDate(String startDate, String endDate) {
         return this.payrollDao.getPayrollReportByDate(startDate, endDate);
     }
+
+    @Override
+    public int isPayrollRecordExit(String startDate,String stopDate, int storeId) {
+        return this.payrollDao.isPayrollRecordExit(startDate,stopDate, storeId);
+    }
+
 }

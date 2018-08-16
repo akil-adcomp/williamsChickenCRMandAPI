@@ -4,6 +4,7 @@
  */
 package cc.altius.model.mapper;
 
+import cc.altius.model.DateRange;
 import cc.altius.model.Employee;
 import cc.altius.model.Payroll;
 import cc.altius.model.Store;
@@ -26,7 +27,8 @@ public class PayrollRowMapper implements RowMapper<Payroll> {
 
         Employee employee = new Employee();
         employee.setEmployeeId(rs.getInt("EMPLOYEE_ID"));
-        employee.setFirstName(rs.getString("name"));
+        employee.setFirstName(rs.getString("FIRST_NAME"));
+        employee.setLastName(rs.getString("LAST_NAME"));
         data.setEmployee(employee);
 
         data.setLastModifiedBy(rs.getInt("LAST_MODIFIED_BY"));
@@ -34,7 +36,7 @@ public class PayrollRowMapper implements RowMapper<Payroll> {
         data.setOt(rs.getInt("OT"));
         data.setPayRate(rs.getDouble("PAY_RATE"));
         data.setPayrollId(rs.getInt("PAYROLL_ID"));
-        data.setRegHour(rs.getInt("REG_HOUR"));
+        data.setRegHour(rs.getDouble("REG_HOUR"));
 
         Store store = new Store();
         store.setStoreId(rs.getInt("STORE_ID"));
@@ -44,6 +46,11 @@ public class PayrollRowMapper implements RowMapper<Payroll> {
         user.setUserId(rs.getInt("CREATED_BY"));
         user.setUsername(rs.getString("USERNAME"));
         data.setUser(user);
+        
+        DateRange dateRange=new DateRange();
+        dateRange.setStartDate(rs.getString("START_DATE"));
+        dateRange.setStopDate(rs.getString("STOP_DATE"));
+        data.setDateRange(dateRange);
         return data;
     }
 }

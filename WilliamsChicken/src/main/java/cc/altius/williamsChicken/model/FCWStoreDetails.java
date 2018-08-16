@@ -10,7 +10,7 @@ import java.io.Serializable;
  *
  * @author altius
  */
-public class FCWStoreDetails implements Serializable{
+public class FCWStoreDetails implements Serializable {
 
     private Vendor vendor;
     private String invoiceNo;
@@ -56,5 +56,10 @@ public class FCWStoreDetails implements Serializable{
 
     public void setPaidAmount(double paidAmount) {
         this.paidAmount = paidAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "FCWStoreDetails{" + "vendor=" + vendor + ", invoiceNo=" + invoiceNo + ", amount=" + amount + ", chickenNo=" + chickenNo + ", paidAmount=" + paidAmount + '}';
     }
 }

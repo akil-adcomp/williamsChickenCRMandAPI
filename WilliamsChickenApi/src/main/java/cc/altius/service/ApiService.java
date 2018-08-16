@@ -4,7 +4,7 @@
  */
 package cc.altius.service;
 
-import cc.altius.model.ValidToken;
+import cc.altius.model.ValidTokenAndExpDate;
 import java.util.Map;
 
 /**
@@ -17,9 +17,9 @@ public interface ApiService {
 
     public Map<String, Object> forgotPassword(String emailId);
 
-    public Map<String, Object> updatePassword(String emailId, String oldPassword, String newPassword);
+    public Map<String, Object> updatePassword(int userId, String oldPassword, String newPassword);
 
-    public ValidToken validateToken(String token, int userId);
+    public ValidTokenAndExpDate validateToken(String token, int userId);
 
     public Map<String, Object> getTokenByUserId(int userId);
 

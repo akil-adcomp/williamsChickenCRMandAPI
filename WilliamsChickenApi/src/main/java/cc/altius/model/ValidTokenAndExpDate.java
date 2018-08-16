@@ -8,7 +8,7 @@ package cc.altius.model;
  *
  * @author altius
  */
-public class ValidToken {
+public class ValidTokenAndExpDate {
 
     private boolean isValid;
     private Integer userId;

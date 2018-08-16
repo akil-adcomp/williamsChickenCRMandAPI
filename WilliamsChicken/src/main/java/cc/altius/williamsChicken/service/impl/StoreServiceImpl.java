@@ -30,6 +30,11 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    public List<Store> getAvailableStoreListForManagerMapping() {
+        return this.storeDao.getAvailableStoreListForManagerMapping();
+    }
+
+    @Override
     public int addStore(Store store) {
         return this.storeDao.addStore(store);
     }

@@ -103,6 +103,9 @@
                         <li>
                             <a href="../report/reportSales.htm"><span class="fa fa-th-list"></span>Sales Report</a>
                         </li>
+                        <li>
+                            <a href="../report/reportBankRegister.htm"><span class="fa fa-th-list"></span>Bank Register Report</a>
+                        </li>
                     </sec:authorize>
                 </ul>
             </li>

@@ -107,7 +107,7 @@ body {
 .page-container .page-content {
   min-height: 100%;
   margin-left: 220px;
-  background: #f5f5f5 url('../img/bg.png') left top repeat;
+  background: #d6d6d6 url('../img/bg.png') left top repeat;
   position: relative;
   zoom: 1;
 }
@@ -1442,7 +1442,7 @@ a.list-group-item:focus {
   border-top-color: #1caf9a;
 }
 .panel.panel-warning {
-  border-top-color: #1caf9a;
+  border-top-color: #f4892c;
 }
 .panel.panel-danger {
   border-top-color: #E04B4A;
@@ -2051,8 +2051,8 @@ ul.panel-controls > li > .dropdown-menu:before {
   border-color: #2c313b;
 }
 .btn-info {
-  background-color: #1caf9a;
-  border-color: #1caf9a;
+  background-color: #f4892c;
+  border-color: #f4892c;
 }
 .btn-info:hover,
 .btn-info:focus,
@@ -3873,7 +3873,11 @@ background: #1caf9a !important;
   float: left;
   width: 100%;
   min-height: 100%;
-  background: url("../img/bg.png") left top repeat #1b1e24;
+  /*background: url("../img/bg.png") left top repeat #1b1e24;*/
+    background: url("../img/backgrounds/backimage.png") ;
+        background-repeat: no-repeat ;
+        background-size: cover;
+
 }
 .login-container .login-box {
   width: 400px;
@@ -3890,14 +3894,14 @@ background: #1caf9a !important;
 .login-container .login-box .login-body {
   width: 100%;
   float: left;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.4);
   padding: 20px;
   -moz-border-radius: 0px;
   -webkit-border-radius: 0px;
-  border-radius: 0px;
+  border-radius: 3px;
 }
 .login-container .login-box .login-body .login-title {
-  color: #FFF;
+  color: #2b1400;
   font-size: 19px;
   font-weight: 300;
   margin-bottom: 20px;

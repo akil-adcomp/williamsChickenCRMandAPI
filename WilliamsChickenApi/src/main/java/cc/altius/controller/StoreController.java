@@ -7,8 +7,7 @@ package cc.altius.controller;
 import cc.altius.model.Employee;
 import cc.altius.model.ResponseFormat;
 import cc.altius.model.Store;
-import cc.altius.model.ValidToken;
-import cc.altius.model.Vendor;
+import cc.altius.model.ValidTokenAndExpDate;
 import cc.altius.service.ApiService;
 import cc.altius.service.StoreService;
 import cc.altius.utils.ErrorConstants;
@@ -17,7 +16,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import io.swagger.annotations.Authorization;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +61,8 @@ public class StoreController {
         Map<String, Object> responseMap = null;
         if (appToken.equals(williamsChickenApiToken)) {
             try {
-                ValidToken validToken = this.apiService.validateToken(token, userId);
-                if (validToken.isIsValid()) {
+                ValidTokenAndExpDate validTokenAndExpDate = this.apiService.validateToken(token, userId);
+                if (validTokenAndExpDate.isIsValid()) {
                     List<Store> storeList = this.storeService.getStoreList();
                     return new ResponseEntity(storeList, HttpStatus.OK);
                 } else {
@@ -84,7 +82,7 @@ public class StoreController {
             }
         } else {
             responseFormat.setStatus("Failed");
-            responseFormat.setFailedReason("Invalid token");
+            responseFormat.setFailedReason("You are using older version of APP");
             responseFormat.setFailedValue(ErrorConstants.INVALID_VERSION_TOKEN);
             return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
 
@@ -112,8 +110,8 @@ public class StoreController {
         Map<String, Object> responseMap = null;
         if (appToken.equals(williamsChickenApiToken)) {
             try {
-                ValidToken validToken = this.apiService.validateToken(token, userId);
-                if (validToken.isIsValid()) {
+                ValidTokenAndExpDate validTokenAndExpDate = this.apiService.validateToken(token, userId);
+                if (validTokenAndExpDate.isIsValid()) {
                     Store store = this.storeService.getStoreIdByUserId(userId);
                     return new ResponseEntity(store, HttpStatus.OK);
                 } else {
@@ -133,7 +131,7 @@ public class StoreController {
             }
         } else {
             responseFormat.setStatus("Failed");
-            responseFormat.setFailedReason("Invalid token");
+            responseFormat.setFailedReason("You are using older version of APP");
             responseFormat.setFailedValue(ErrorConstants.INVALID_VERSION_TOKEN);
             return new ResponseEntity(responseFormat, HttpStatus.NOT_ACCEPTABLE);
 

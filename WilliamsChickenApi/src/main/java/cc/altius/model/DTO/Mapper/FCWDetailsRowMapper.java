@@ -24,7 +24,7 @@ public class FCWDetailsRowMapper implements RowMapper<FCW> {
         FCW data = new FCW();
         data.setAmount(rs.getInt("AMOUNT"));
         data.setInvoice(rs.getString("INVOICE"));
-        data.setOfChickenPur(rs.getInt("OF_CHICKEN_PUR"));
+//        data.setOfChickenPur(rs.getInt("OF_CHICKEN_PUR"));
         Vendor vendor = new Vendor();
         vendor.setVendorId(rs.getInt("VENDOR_ID"));
         vendor.setVendorName(rs.getString("VENDOR_NAME"));

@@ -18,4 +18,8 @@ public interface FCWDao {
     public List<FCW> getFCWReportByDate(String startDate, String endDate);
 
     public List<FCW> getFCWDetailsReport(String startDate, String stopDate);
+
+    public double getTotalPaidOutsByDateAndStoreId(String submitDate, int storeId);
+
+    public boolean isFCWRecordExit(String submitDate, int storeId);
 }

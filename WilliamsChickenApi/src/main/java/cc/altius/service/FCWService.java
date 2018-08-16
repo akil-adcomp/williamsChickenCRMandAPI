@@ -13,7 +13,11 @@ import java.util.List;
  */
 public interface FCWService {
 
-    public int addFCW(List<FCW> fcw,int userId);
+    public int addFCW(List<FCW> fcw, int userId);
 
     public List<FCW> getFCWReportByDate(String startDate, String endDate);
+
+    public double getTotalPaidOutsByDateAndStoreId(String submitDate, int storeId);
+
+    public boolean isFCWRecordExit(String submitDate, int storeId);
 }

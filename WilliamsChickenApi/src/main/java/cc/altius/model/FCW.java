@@ -20,10 +20,7 @@ public class FCW implements Serializable {
     private double amount;
     private String submitDate;
     private double paidOutAmount;
-    private double totalPaidOutAmount;
-    private double totalAmount;
-    private int ofChickenPur;
-    private int totalOfChickenPur;
+    private int noOfStoreTranscation;
     private int userId;
     private Date createdDate;
     private int createdBy;
@@ -38,8 +35,6 @@ public class FCW implements Serializable {
     public void setDummyVendor(String dummyVendor) {
         this.dummyVendor = dummyVendor;
     }
-    
-    
 
     public int getFcwId() {
         return fcwId;
@@ -97,36 +92,12 @@ public class FCW implements Serializable {
         this.paidOutAmount = paidOutAmount;
     }
 
-    public double getTotalPaidOutAmount() {
-        return totalPaidOutAmount;
+    public int getNoOfStoreTranscation() {
+        return noOfStoreTranscation;
     }
 
-    public void setTotalPaidOutAmount(double totalPaidOutAmount) {
-        this.totalPaidOutAmount = totalPaidOutAmount;
-    }
-
-    public double getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(double totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public int getOfChickenPur() {
-        return ofChickenPur;
-    }
-
-    public void setOfChickenPur(int ofChickenPur) {
-        this.ofChickenPur = ofChickenPur;
-    }
-
-    public int getTotalOfChickenPur() {
-        return totalOfChickenPur;
-    }
-
-    public void setTotalOfChickenPur(int totalOfChickenPur) {
-        this.totalOfChickenPur = totalOfChickenPur;
+    public void setNoOfStoreTranscation(int noOfStoreTranscation) {
+        this.noOfStoreTranscation = noOfStoreTranscation;
     }
 
     public int getUserId() {
@@ -171,7 +142,7 @@ public class FCW implements Serializable {
 
     @Override
     public String toString() {
-        return "FCW{" + "fcwId=" + fcwId + ", store=" + store + ", vendor=" + vendor + ", invoice=" + invoice + ", amount=" + amount + ", submitDate=" + submitDate + ", paidOutAmount=" + paidOutAmount + ", totalPaidOutAmount=" + totalPaidOutAmount + ", totalAmount=" + totalAmount + ", ofChickenPur=" + ofChickenPur + ", totalOfChickenPur=" + totalOfChickenPur + ", userId=" + userId + ", createdDate=" + createdDate + ", createdBy=" + createdBy + ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy + ", dummyVendor=" + dummyVendor + '}';
+        return "FCW{" + "fcwId=" + fcwId + ", store=" + store + ", vendor=" + vendor + ", invoice=" + invoice + ", amount=" + amount + ", submitDate=" + submitDate + ", paidOutAmount=" + paidOutAmount + ", noOfStoreTranscation=" + noOfStoreTranscation + ", userId=" + userId + ", createdDate=" + createdDate + ", createdBy=" + createdBy + ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy + ", dummyVendor=" + dummyVendor + '}';
     }
 
 }

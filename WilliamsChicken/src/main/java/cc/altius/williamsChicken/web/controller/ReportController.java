@@ -10,17 +10,24 @@ import cc.altius.utils.POI.POIRow;
 import cc.altius.utils.POI.POIWorkSheet;
 import cc.altius.williamsChicken.exception.CouldNotBuildExcelException;
 import cc.altius.williamsChicken.model.DTO.AccessLogReportDTO;
+import cc.altius.williamsChicken.model.DTO.BankRegisterDTO;
 import cc.altius.williamsChicken.model.DTO.FCWReportDTO;
 import cc.altius.williamsChicken.model.DTO.PayrollReportDTO;
 import cc.altius.williamsChicken.model.DTO.SalesReportDTO;
-import cc.altius.williamsChicken.model.FCW;
-import cc.altius.williamsChicken.model.Payroll;
+import cc.altius.williamsChicken.model.FCWStoreDetails;
 import cc.altius.williamsChicken.model.User;
+import cc.altius.williamsChicken.model.Vendor;
 import cc.altius.williamsChicken.service.ReportService;
 import cc.altius.williamsChicken.service.UserService;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,6 +126,30 @@ public class ReportController {
 
     @RequestMapping(value = "/report/reportFCWExcel.htm")
     public void getFCWExcelReport(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) throws CouldNotBuildExcelException {
+        int i = 1;
+        List<Map<String, Object>> map = new ArrayList<>();
+        Map<String, Object> map1 = new HashMap<>();
+        map1.put("Details", "Details");
+        map1.put("Details", "Vendor Name");
+        map1.put("Details", "Invoice Number");
+        map1.put("Details", "Amount");
+        map1.put("Details", "#Of Chicken");
+        map1.put("Details", "Paid");
+        FCWReportDTO test = new FCWReportDTO();
+        List<FCWStoreDetails> list = new ArrayList<>();
+        FCWStoreDetails test1 = new FCWStoreDetails();
+        Vendor v = new Vendor();
+        v.setVendorName("Vendor Name");
+        test1.setVendor(v);
+        test1.setAmount(13.50);
+        test1.setChickenNo(20);
+        test1.setInvoiceNo("SFH101");
+        test1.setPaidAmount(50.20);
+        list.add(test1);
+        test.setStoreDetails(list);
+        map.add(0, map1);
+        Map<String, Object> m = map.get(0);
+
         try {
             String startDate = ServletRequestUtils.getStringParameter(request, "startDate", DateUtils.getCurrentDateString(DateUtils.IST, DateUtils.YMD));
             String stopDate = ServletRequestUtils.getStringParameter(request, "stopDate", DateUtils.getCurrentDateString(DateUtils.IST, DateUtils.YMD));
@@ -170,16 +201,19 @@ public class ReportController {
     }
 
     @RequestMapping(value = "/report/reportPayroll.htm")
-    public String showPayrollReport(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
-        String startDate = ServletRequestUtils.getStringParameter(request, "startDate", DateUtils.getCurrentDateString(DateUtils.IST, DateUtils.YMD));
-        String stopDate = ServletRequestUtils.getStringParameter(request, "stopDate", DateUtils.getCurrentDateString(DateUtils.IST, DateUtils.YMD));
+    public String showPayrollReport(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) throws ParseException {
+        String startDate = ServletRequestUtils.getStringParameter(request, "startDate", "");
+        if (!startDate.equals("")) {
+            Date startDate1 = DateUtils.getDateFromString(startDate, DateUtils.YMD);
+            Date dateAfterAddingDays = DateUtils.addDays(startDate1, 6);
+            String stopDate = DateUtils.formatDate(dateAfterAddingDays, DateUtils.YMD);
+            List<PayrollReportDTO> payrollList = this.reportService.getPayrollReport(startDate, stopDate);
 
-        List<PayrollReportDTO> payrollList = this.reportService.getPayrollReport(startDate, stopDate);
-
-        modelMap.addAttribute("payrollList", payrollList);
-
+            modelMap.addAttribute("payrollList", payrollList);
+        }
         modelMap.addAttribute("startDate", startDate);
-        modelMap.addAttribute("stopDate", stopDate);
+
+//        modelMap.addAttribute("stopDate", stopDate);
         return "report/reportPayroll";
     }
 
@@ -240,10 +274,21 @@ public class ReportController {
         String startDate = ServletRequestUtils.getStringParameter(request, "startDate", DateUtils.getCurrentDateString(DateUtils.IST, DateUtils.YMD));
         String stopDate = ServletRequestUtils.getStringParameter(request, "stopDate", DateUtils.getCurrentDateString(DateUtils.IST, DateUtils.YMD));
         List<SalesReportDTO> salesList = this.reportService.getSalesReport(startDate, stopDate);
-        System.out.println("startDate "+startDate+" stopDate = "+stopDate+" list == "+salesList);
+        System.out.println("startDate " + startDate + " stopDate = " + stopDate + " list == " + salesList);
         modelMap.addAttribute("salesList", salesList);
         modelMap.addAttribute("startDate", startDate);
         modelMap.addAttribute("stopDate", stopDate);
         return "report/reportSales";
+    }
+
+    @RequestMapping(value = "/report/reportBankRegister.htm")
+    public String showBankRegisterReport(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap) {
+        String startDate = ServletRequestUtils.getStringParameter(request, "startDate", DateUtils.getCurrentDateString(DateUtils.IST, DateUtils.YMD));
+        String stopDate = ServletRequestUtils.getStringParameter(request, "stopDate", DateUtils.getCurrentDateString(DateUtils.IST, DateUtils.YMD));
+        List<BankRegisterDTO> bankRegisterList = this.reportService.getBankRegisterReport(startDate, stopDate);
+        modelMap.addAttribute("bankRegisterList", bankRegisterList);
+        modelMap.addAttribute("startDate", startDate);
+        modelMap.addAttribute("stopDate", stopDate);
+        return "report/reportBankRegister";
     }
 }
